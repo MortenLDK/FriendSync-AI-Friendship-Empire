@@ -173,44 +173,75 @@ Return JSON format:
     const suggestions = {
       immediateActions: [],
       weeklyTouchpoints: [],
-      conversationStarters: []
+      conversationStarters: [],
+      giftIdeas: [],
+      supportOpportunities: []
     };
 
     // Love language based suggestions
     switch (friend.loveLanguage) {
       case 'Quality Time':
-        suggestions.immediateActions.push('Schedule dedicated one-on-one time');
+        suggestions.immediateActions.push('Schedule dedicated one-on-one time with them');
         suggestions.weeklyTouchpoints.push('Regular coffee/call sessions');
+        suggestions.giftIdeas.push('Plan an experience together rather than buying something');
         break;
       case 'Words of Affirmation':
         suggestions.immediateActions.push('Send encouraging message about their strengths');
         suggestions.weeklyTouchpoints.push('Share positive feedback or recognition');
+        suggestions.giftIdeas.push('Write a heartfelt note or letter');
         break;
       case 'Acts of Service':
         suggestions.immediateActions.push('Offer to help with a specific task');
         suggestions.weeklyTouchpoints.push('Look for ways to make their life easier');
+        suggestions.giftIdeas.push('Do something helpful for them instead of buying gifts');
         break;
       case 'Physical Touch':
         suggestions.immediateActions.push('Plan in-person meeting with warm greeting');
+        suggestions.weeklyTouchpoints.push('Make sure to include appropriate physical connection');
         break;
       case 'Receiving Gifts':
         suggestions.immediateActions.push('Send thoughtful gift related to their interests');
+        suggestions.weeklyTouchpoints.push('Small thoughtful gestures or tokens');
+        suggestions.giftIdeas.push('Something personalized based on their hobbies');
         break;
+      default:
+        suggestions.immediateActions.push('Reach out and check how they\'re doing');
+        suggestions.weeklyTouchpoints.push('Send regular friendly messages');
     }
 
     // Goal-based conversation starters
     if (friend.currentGoals?.length) {
       friend.currentGoals.forEach(goal => {
         suggestions.conversationStarters.push(`How is your progress on ${goal}?`);
+        suggestions.supportOpportunities.push(`Offer support or resources for ${goal}`);
       });
+    } else {
+      suggestions.conversationStarters.push('What are you most excited about right now?');
+      suggestions.conversationStarters.push('What goals are you working toward?');
     }
 
     // Interest-based suggestions
     if (friend.interests?.length) {
-      friend.interests.forEach(interest => {
+      friend.interests.slice(0, 3).forEach(interest => {
         suggestions.conversationStarters.push(`What's new in ${interest} that excites you?`);
+        suggestions.giftIdeas.push(`Something related to their ${interest} interest`);
+      });
+    } else {
+      suggestions.conversationStarters.push('What hobbies have you been enjoying lately?');
+    }
+
+    // Challenge-based support
+    if (friend.challenges?.length) {
+      friend.challenges.slice(0, 2).forEach(challenge => {
+        suggestions.supportOpportunities.push(`Ask how you can help with ${challenge}`);
       });
     }
+
+    // Always add these universal suggestions
+    suggestions.immediateActions.push('Send them something that made you think of them');
+    suggestions.weeklyTouchpoints.push('Regular check-ins at their preferred time');
+    suggestions.conversationStarters.push('Ask about their biggest win this week');
+    suggestions.conversationStarters.push('Share something you appreciate about them');
 
     return suggestions;
   }

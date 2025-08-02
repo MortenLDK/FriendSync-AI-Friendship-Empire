@@ -42,6 +42,31 @@
   cursor: not-allowed;
 }
 
+/* Button Group Styling */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.secondary-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.secondary-button:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
 .premium-badge {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;

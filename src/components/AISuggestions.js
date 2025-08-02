@@ -83,9 +83,21 @@ const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
             onChange={(e) => setApiKey(e.target.value)}
             className="api-key-input"
           />
-          <button onClick={handleApiKeySubmit} className="primary-button">
-            Enable AI Suggestions
-          </button>
+          <div className="button-group">
+            <button onClick={handleApiKeySubmit} className="primary-button">
+              Enable AI Suggestions
+            </button>
+            <button 
+              onClick={() => {
+                setShowApiKeyInput(false);
+                const offlineSuggestions = chatgptService.getOfflineSuggestions(friend, userProfile);
+                setSuggestions(offlineSuggestions);
+              }} 
+              className="secondary-button"
+            >
+              Try Free Offline Suggestions
+            </button>
+          </div>
         </div>
         
         <div className="api-key-help">

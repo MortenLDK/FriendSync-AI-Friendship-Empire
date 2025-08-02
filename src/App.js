@@ -35,11 +35,22 @@ function App() {
         setUserProfile(initialProfile);
         setShowUserProfile(true);
       }
+
+      // Load saved contacts for this user
+      const savedContacts = localStorage.getItem(`friendsync_contacts_${user.id}`);
+      if (savedContacts) {
+        const contactsData = JSON.parse(savedContacts);
+        setContacts(contactsData);
+      }
     }
   }, [user, isLoaded]);
 
   const handleContactsImported = (importedContacts) => {
     setContacts(importedContacts);
+    // Save contacts to user-specific localStorage
+    if (user) {
+      localStorage.setItem(`friendsync_contacts_${user.id}`, JSON.stringify(importedContacts));
+    }
   };
 
   const handleProfileUpdate = (profile) => {
