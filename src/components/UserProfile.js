@@ -166,6 +166,17 @@ const UserProfile = ({ onProfileUpdate }) => {
             
             <div className="form-group">
               <label>Personality Type (Optional)</label>
+              <div className="personality-test-links">
+                <p>Don't know your type? Take a free test:</p>
+                <div className="test-links">
+                  <a href="https://www.16personalities.com/free-personality-test" target="_blank" rel="noopener noreferrer">
+                    16Personalities (Free)
+                  </a>
+                  <a href="https://www.truity.com/test/type-finder-personality-test-new" target="_blank" rel="noopener noreferrer">
+                    Truity TypeFinder
+                  </a>
+                </div>
+              </div>
               <select
                 value={profile.personalityType}
                 onChange={(e) => updateProfile({ personalityType: e.target.value })}

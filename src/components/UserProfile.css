@@ -251,6 +251,43 @@
   background-color: #5a6268;
 }
 
+/* Personality Test Links */
+.personality-test-links {
+  margin-bottom: 1rem;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.personality-test-links p {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.test-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.test-links a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.test-links a:hover {
+  background-color: #667eea;
+  color: white;
+  text-decoration: none;
+}
+
 @media (max-width: 768px) {
   .checkbox-grid {
     grid-template-columns: 1fr;
