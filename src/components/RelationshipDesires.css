@@ -1,0 +1,291 @@
+.relationship-desires {
+  margin-top: 1rem;
+  border-left: 4px solid #e74c3c;
+  background: linear-gradient(135deg, #fff 0%, #fef9ff 100%);
+}
+
+.relationship-desires-editor {
+  margin-top: 1rem;
+  border-left: 4px solid #e74c3c;
+  max-width: 800px;
+}
+
+.desires-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.desires-header h3 {
+  color: #e74c3c;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.edit-desires-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.edit-desires-button:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  transform: translateY(-1px);
+}
+
+.desires-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.desire-section h4 {
+  color: #333;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.desire-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.desire-tag {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+}
+
+.desire-tag.business {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.desire-tag.personal {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.desire-tag.giving {
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+}
+
+.desire-tag.goals {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+}
+
+.specific-request {
+  font-style: italic;
+  color: #555;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #e74c3c;
+  margin-top: 0.5rem;
+}
+
+.mastermind-indicator {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.empty-desires {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #666;
+}
+
+.empty-desires p {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Editor Styles */
+.editor-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.editor-header h3 {
+  color: #e74c3c;
+  margin-bottom: 0.5rem;
+}
+
+.editor-header p {
+  color: #666;
+}
+
+.editor-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.editor-section {
+  border: 2px solid #f1f2f6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: #fafbfc;
+}
+
+.editor-section h4 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #e74c3c;
+  padding-bottom: 0.5rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+}
+
+.subsection:last-child {
+  margin-bottom: 0;
+}
+
+.subsection > label {
+  display: block;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+  background: white;
+}
+
+.checkbox-label:hover {
+  border-color: #e74c3c;
+  background-color: #fef5f5;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.checkbox-label:has(input[type="checkbox"]:checked) {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border-color: #e74c3c;
+  font-weight: 500;
+}
+
+.subsection textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.subsection textarea:focus {
+  outline: none;
+  border-color: #e74c3c;
+}
+
+.editor-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 2px solid #f1f2f6;
+  padding-top: 1.5rem;
+}
+
+.secondary-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  flex: 1;
+}
+
+.secondary-button:hover {
+  background-color: #5a6268;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex: 1;
+  font-weight: 500;
+}
+
+.primary-button:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .desires-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .edit-desires-button {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .editor-buttons {
+    flex-direction: column;
+  }
+  
+  .desire-tags {
+    justify-content: center;
+  }
+  
+  .desires-summary {
+    gap: 1rem;
+  }
+}

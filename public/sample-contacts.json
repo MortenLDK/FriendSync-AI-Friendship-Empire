@@ -1,0 +1,26 @@
+[
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "+1-555-0123",
+    "category": "Inner Circle",
+    "notes": "Loves hiking and coffee",
+    "loveLanguage": "Quality Time"
+  },
+  {
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "phone": "+1-555-0456",
+    "category": "Regular Friends",
+    "notes": "Great at giving advice",
+    "loveLanguage": "Words of Affirmation"
+  },
+  {
+    "name": "Mike Johnson",
+    "email": "mike.j@example.com",
+    "phone": "+1-555-0789",
+    "category": "Network",
+    "notes": "Works in tech, potential collaboration",
+    "loveLanguage": "Acts of Service"
+  }
+]

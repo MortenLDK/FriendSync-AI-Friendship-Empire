@@ -1,0 +1,250 @@
+.contact-list-header {
+  margin-bottom: 1.5rem;
+}
+
+.contact-list-header h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-container {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.filter-container {
+  min-width: 150px;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.contact-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.contact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.contact-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.contact-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-name {
+  color: #333;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.contact-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.contact-category {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.premium-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ai-button,
+.expand-button,
+.relationship-button,
+.invite-button {
+  background: none;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-button:hover,
+.expand-button:hover,
+.relationship-button:hover,
+.invite-button:hover {
+  border-color: #667eea;
+  background-color: #f8f9fa;
+}
+
+.ai-button.active,
+.expand-button.active,
+.relationship-button.active {
+  background-color: #667eea;
+  border-color: #667eea;
+  transform: scale(1.1);
+}
+
+.invite-button {
+  border-color: #e74c3c !important;
+  background-color: #fff2f2 !important;
+}
+
+.invite-button:hover {
+  border-color: #e74c3c !important;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+  color: white;
+}
+
+.invite-button.active {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+  transform: scale(1.1);
+}
+
+.expanded-profile {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.contact-details {
+  space-y: 0.5rem;
+}
+
+.contact-detail {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.detail-value {
+  color: #333;
+  font-size: 0.9rem;
+  word-break: break-word;
+}
+
+.no-contacts {
+  text-align: center;
+  color: #6c757d;
+  padding: 3rem 1rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+  }
+  
+  .contacts-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .contact-card {
+    padding: 1rem;
+  }
+  
+  .contact-header {
+    margin-bottom: 0.75rem;
+  }
+  
+  .contact-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,317 @@
+.invite-friend-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.invite-friend-button:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+}
+
+.invite-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.invite-modal {
+  background: white;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 0 24px;
+  border-bottom: 2px solid #f1f2f6;
+  margin-bottom: 24px;
+}
+
+.modal-header h3 {
+  color: #333;
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 8px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-button:hover {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.modal-content {
+  padding: 0 24px;
+}
+
+.invite-type-selector {
+  margin-bottom: 24px;
+}
+
+.invite-type-selector > label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.radio-option:hover {
+  border-color: #667eea;
+  background-color: #f8f9fa;
+}
+
+.radio-option:has(input[type="radio"]:checked) {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.radio-option input[type="radio"] {
+  margin-right: 12px;
+  margin-top: 2px;
+}
+
+.radio-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.radio-content strong {
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.radio-content span {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.message-editor {
+  margin-bottom: 24px;
+}
+
+.message-editor > label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.message-textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.message-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.invite-options {
+  margin-bottom: 24px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.checkbox-option:hover {
+  border-color: #667eea;
+  background-color: #f8f9fa;
+}
+
+.checkbox-option:has(input[type="checkbox"]:checked) {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+}
+
+.checkbox-option input[type="checkbox"] {
+  margin-right: 12px;
+}
+
+.viral-potential {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.viral-info h4 {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+}
+
+.viral-info p {
+  margin: 0 0 16px 0;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.viral-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat strong {
+  font-size: 0.9rem;
+  opacity: 1;
+}
+
+.stat span {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  border-top: 2px solid #f1f2f6;
+}
+
+.secondary-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  flex: 1;
+}
+
+.secondary-button:hover {
+  background-color: #5a6268;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex: 1;
+  font-weight: 500;
+}
+
+.primary-button:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .invite-modal {
+    margin: 20px;
+    max-height: calc(100vh - 40px);
+  }
+  
+  .modal-header {
+    padding: 16px 16px 0 16px;
+  }
+  
+  .modal-content {
+    padding: 0 16px;
+  }
+  
+  .modal-actions {
+    padding: 16px;
+    flex-direction: column;
+  }
+  
+  .viral-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .radio-group {
+    gap: 8px;
+  }
+  
+  .radio-option {
+    padding: 12px;
+  }
+}
