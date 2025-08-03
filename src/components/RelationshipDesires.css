@@ -267,24 +267,24 @@
     gap: 1rem;
     align-items: stretch;
   }
-  
+
   .edit-desires-button {
     width: 100%;
     padding: 12px;
   }
-  
+
   .checkbox-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .editor-buttons {
     flex-direction: column;
   }
-  
+
   .desire-tags {
     justify-content: center;
   }
-  
+
   .desires-summary {
     gap: 1rem;
   }

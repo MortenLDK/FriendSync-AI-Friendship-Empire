@@ -137,7 +137,9 @@
 }
 
 @keyframes typing {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     transform: translateY(0);
     opacity: 0.4;
   }
@@ -164,7 +166,9 @@
   font-size: 0.875rem;
   resize: none;
   font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .chat-input textarea:focus {

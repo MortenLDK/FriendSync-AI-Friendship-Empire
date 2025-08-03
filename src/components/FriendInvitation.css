@@ -288,29 +288,29 @@
     margin: 20px;
     max-height: calc(100vh - 40px);
   }
-  
+
   .modal-header {
     padding: 16px 16px 0 16px;
   }
-  
+
   .modal-content {
     padding: 0 16px;
   }
-  
+
   .modal-actions {
     padding: 16px;
     flex-direction: column;
   }
-  
+
   .viral-stats {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  
+
   .radio-group {
     gap: 8px;
   }
-  
+
   .radio-option {
     padding: 12px;
   }

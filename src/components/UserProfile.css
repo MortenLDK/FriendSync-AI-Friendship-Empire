@@ -292,15 +292,15 @@
   .checkbox-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .setup-buttons {
     flex-direction: column;
   }
-  
+
   .radio-group {
     gap: 0.25rem;
   }
-  
+
   .radio-label,
   .checkbox-label {
     font-size: 0.85rem;

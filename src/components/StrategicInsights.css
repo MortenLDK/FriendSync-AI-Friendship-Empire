@@ -50,7 +50,9 @@
   padding: 1.5rem;
   text-align: center;
   border: 1px solid #e2e8f0;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .overview-card:hover {
@@ -91,7 +93,7 @@
 }
 
 .insight-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;

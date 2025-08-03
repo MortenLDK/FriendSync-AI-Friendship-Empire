@@ -214,23 +214,23 @@
     align-items: stretch;
     gap: 1rem;
   }
-  
+
   .suggestion-controls {
     justify-content: space-between;
   }
-  
+
   .api-key-setup {
     flex-direction: column;
   }
-  
+
   .suggestion-item {
     padding: 10px;
   }
-  
+
   .suggestion-text {
     font-size: 0.9rem;
   }
-  
+
   .complete-button {
     width: 28px;
     height: 28px;

@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import './StrategicInsights.css';
+import { useEffect, useState } from 'react'
+import './StrategicInsights.css'
 
 const StrategicInsights = ({ contacts, userProfile }) => {
-  const [insights, setInsights] = useState([]);
-  const [selectedInsight, setSelectedInsight] = useState(null);
-  const [networkAnalysis, setNetworkAnalysis] = useState(null);
+  const [insights, setInsights] = useState([])
+  const [selectedInsight, setSelectedInsight] = useState(null)
+  const [networkAnalysis, setNetworkAnalysis] = useState(null)
 
   useEffect(() => {
     if (contacts && contacts.length > 0) {
-      generateStrategicInsights();
-      analyzeNetwork();
+      generateStrategicInsights()
+      analyzeNetwork()
     }
-  }, [contacts, userProfile]);
+  }, [contacts, analyzeNetwork, generateStrategicInsights])
 
   const generateStrategicInsights = () => {
-    const generatedInsights = [];
+    const generatedInsights = []
 
     // 1. RELATIONSHIP BALANCE ANALYSIS
-    const categoryBreakdown = analyzeCategoryBalance();
+    const categoryBreakdown = analyzeCategoryBalance()
     if (categoryBreakdown.recommendation) {
       generatedInsights.push({
         id: 'relationship-balance',
@@ -27,78 +27,80 @@ const StrategicInsights = ({ contacts, userProfile }) => {
         insight: categoryBreakdown.insight,
         recommendation: categoryBreakdown.recommendation,
         actions: categoryBreakdown.actions,
-        metrics: categoryBreakdown.metrics
-      });
+        metrics: categoryBreakdown.metrics,
+      })
     }
 
     // 2. COMMUNICATION OPTIMIZATION
-    const commInsights = analyzeCommunicationPatterns();
+    const commInsights = analyzeCommunicationPatterns()
     if (commInsights.length > 0) {
-      commInsights.forEach(insight => generatedInsights.push(insight));
+      commInsights.forEach((insight) => generatedInsights.push(insight))
     }
 
     // 3. LOVE LANGUAGE DISTRIBUTION
-    const loveLanguageInsights = analyzeLoveLanguages();
+    const loveLanguageInsights = analyzeLoveLanguages()
     if (loveLanguageInsights) {
-      generatedInsights.push(loveLanguageInsights);
+      generatedInsights.push(loveLanguageInsights)
     }
 
     // 4. GOAL ALIGNMENT OPPORTUNITIES
-    const goalInsights = analyzeGoalAlignment();
+    const goalInsights = analyzeGoalAlignment()
     if (goalInsights.length > 0) {
-      goalInsights.forEach(insight => generatedInsights.push(insight));
+      goalInsights.forEach((insight) => generatedInsights.push(insight))
     }
 
     // 5. NETWORKING OPPORTUNITIES
-    const networkingInsights = analyzeNetworkingOpportunities();
+    const networkingInsights = analyzeNetworkingOpportunities()
     if (networkingInsights.length > 0) {
-      networkingInsights.forEach(insight => generatedInsights.push(insight));
+      networkingInsights.forEach((insight) => generatedInsights.push(insight))
     }
 
     // 6. RELATIONSHIP HEALTH ALERTS
-    const healthInsights = analyzeRelationshipHealth();
+    const healthInsights = analyzeRelationshipHealth()
     if (healthInsights.length > 0) {
-      healthInsights.forEach(insight => generatedInsights.push(insight));
+      healthInsights.forEach((insight) => generatedInsights.push(insight))
     }
 
-    setInsights(generatedInsights);
-  };
+    setInsights(generatedInsights)
+  }
 
   const analyzeCategoryBalance = () => {
-    const categories = {};
-    contacts.forEach(contact => {
-      const cat = contact.category || 'Regular Friends';
-      categories[cat] = (categories[cat] || 0) + 1;
-    });
+    const categories = {}
+    contacts.forEach((contact) => {
+      const cat = contact.category || 'Regular Friends'
+      categories[cat] = (categories[cat] || 0) + 1
+    })
 
-    const total = contacts.length;
-    const innerCircle = categories['Inner Circle'] || 0;
-    const business = categories['Business'] || 0;
-    const network = categories['Network'] || 0;
+    const total = contacts.length
+    const innerCircle = categories['Inner Circle'] || 0
+    const business = categories.Business || 0
+    const network = categories.Network || 0
 
-    const innerCirclePercent = (innerCircle / total) * 100;
-    const businessPercent = (business / total) * 100;
+    const innerCirclePercent = (innerCircle / total) * 100
+    const businessPercent = (business / total) * 100
 
-    let insight = '';
-    let recommendation = '';
-    let actions = [];
+    let insight = ''
+    let recommendation = ''
+    let actions = []
 
     if (innerCirclePercent < 10 && total > 5) {
-      insight = `Your Inner Circle represents only ${innerCirclePercent.toFixed(1)}% of your network. Research shows the most successful people have 8-12 deep relationships.`;
-      recommendation = 'Prioritize deepening relationships with your closest friends. Quality over quantity creates the strongest network ROI.';
+      insight = `Your Inner Circle represents only ${innerCirclePercent.toFixed(1)}% of your network. Research shows the most successful people have 8-12 deep relationships.`
+      recommendation =
+        'Prioritize deepening relationships with your closest friends. Quality over quantity creates the strongest network ROI.'
       actions = [
         'Identify 3-5 Regular Friends to promote to Inner Circle',
         'Schedule deeper one-on-one time with potential Inner Circle friends',
-        'Share more personal goals and challenges to build deeper trust'
-      ];
+        'Share more personal goals and challenges to build deeper trust',
+      ]
     } else if (businessPercent < 20 && total > 10) {
-      insight = `Business relationships represent only ${businessPercent.toFixed(1)}% of your network. Professional relationships often generate the highest career and financial opportunities.`;
-      recommendation = 'Expand your professional network strategically. Target industry leaders, mentors, and potential collaborators.';
+      insight = `Business relationships represent only ${businessPercent.toFixed(1)}% of your network. Professional relationships often generate the highest career and financial opportunities.`
+      recommendation =
+        'Expand your professional network strategically. Target industry leaders, mentors, and potential collaborators.'
       actions = [
         'Attend 2-3 industry networking events this month',
         'Reach out to 5 professionals in your field or target industries',
-        'Convert some Network connections to Business relationships'
-      ];
+        'Convert some Network connections to Business relationships',
+      ]
     }
 
     return {
@@ -107,32 +109,34 @@ const StrategicInsights = ({ contacts, userProfile }) => {
       actions,
       metrics: {
         'Inner Circle': `${innerCircle} (${innerCirclePercent.toFixed(1)}%)`,
-        'Business': `${business} (${businessPercent.toFixed(1)}%)`,
-        'Network': `${network} (${((network/total)*100).toFixed(1)}%)`,
-        'Regular Friends': `${categories['Regular Friends'] || 0} (${(((categories['Regular Friends'] || 0)/total)*100).toFixed(1)}%)`
-      }
-    };
-  };
+        Business: `${business} (${businessPercent.toFixed(1)}%)`,
+        Network: `${network} (${((network / total) * 100).toFixed(1)}%)`,
+        'Regular Friends': `${categories['Regular Friends'] || 0} (${(((categories['Regular Friends'] || 0) / total) * 100).toFixed(1)}%)`,
+      },
+    }
+  }
 
   const analyzeCommunicationPatterns = () => {
-    const insights = [];
-    const commStyles = {};
-    const frequencies = {};
+    const insights = []
+    const commStyles = {}
+    const frequencies = {}
 
-    contacts.forEach(contact => {
+    contacts.forEach((contact) => {
       if (contact.communicationStyle) {
-        commStyles[contact.communicationStyle] = (commStyles[contact.communicationStyle] || 0) + 1;
+        commStyles[contact.communicationStyle] = (commStyles[contact.communicationStyle] || 0) + 1
       }
       if (contact.communicationFreq) {
-        frequencies[contact.communicationFreq] = (frequencies[contact.communicationFreq] || 0) + 1;
+        frequencies[contact.communicationFreq] = (frequencies[contact.communicationFreq] || 0) + 1
       }
-    });
+    })
 
     // Analyze communication style distribution
-    const totalWithStyles = Object.values(commStyles).reduce((a, b) => a + b, 0);
+    const totalWithStyles = Object.values(commStyles).reduce((a, b) => a + b, 0)
     if (totalWithStyles > 3) {
-      const dominant = Object.entries(commStyles).reduce((a, b) => commStyles[a[0]] > commStyles[b[0]] ? a : b);
-      const dominantPercent = (dominant[1] / totalWithStyles) * 100;
+      const dominant = Object.entries(commStyles).reduce((a, b) =>
+        commStyles[a[0]] > commStyles[b[0]] ? a : b,
+      )
+      const dominantPercent = (dominant[1] / totalWithStyles) * 100
 
       if (dominantPercent > 60) {
         insights.push({
@@ -141,28 +145,29 @@ const StrategicInsights = ({ contacts, userProfile }) => {
           title: 'Communication Style Diversity',
           priority: 'medium',
           insight: `${dominantPercent.toFixed(1)}% of your network shares the same communication style (${dominant[0]}). This creates an echo chamber effect.`,
-          recommendation: 'Diversify your network with people who have different communication styles to expand your perspective and influence.',
+          recommendation:
+            'Diversify your network with people who have different communication styles to expand your perspective and influence.',
           actions: [
             'Actively seek friendships with people who communicate differently',
             'Practice adapting your communication style to match others',
-            'Join groups that attract diverse communication styles'
-          ]
-        });
+            'Join groups that attract diverse communication styles',
+          ],
+        })
       }
     }
 
-    return insights;
-  };
+    return insights
+  }
 
   const analyzeLoveLanguages = () => {
-    const loveLanguages = {};
-    contacts.forEach(contact => {
+    const loveLanguages = {}
+    contacts.forEach((contact) => {
       if (contact.loveLanguage) {
-        loveLanguages[contact.loveLanguage] = (loveLanguages[contact.loveLanguage] || 0) + 1;
+        loveLanguages[contact.loveLanguage] = (loveLanguages[contact.loveLanguage] || 0) + 1
       }
-    });
+    })
 
-    const totalWithLanguages = Object.values(loveLanguages).reduce((a, b) => a + b, 0);
+    const totalWithLanguages = Object.values(loveLanguages).reduce((a, b) => a + b, 0)
     if (totalWithLanguages < contacts.length * 0.3) {
       return {
         id: 'love-language-data',
@@ -170,36 +175,37 @@ const StrategicInsights = ({ contacts, userProfile }) => {
         title: 'Love Language Intelligence Gap',
         priority: 'high',
         insight: `Only ${totalWithLanguages} of ${contacts.length} friends have love language data. This represents a massive optimization opportunity.`,
-        recommendation: 'Love languages are the key to relationship optimization. Gathering this data will 5x your relationship effectiveness.',
+        recommendation:
+          'Love languages are the key to relationship optimization. Gathering this data will 5x your relationship effectiveness.',
         actions: [
           'Ask friends to take the love language quiz during casual conversations',
           'Share your own love language first to create reciprocity',
-          'Use the 5 Love Languages book as a conversation starter'
+          'Use the 5 Love Languages book as a conversation starter',
         ],
         metrics: {
-          'Profiled': totalWithLanguages,
-          'Missing': contacts.length - totalWithLanguages,
-          'Completion Rate': `${((totalWithLanguages/contacts.length)*100).toFixed(1)}%`
-        }
-      };
+          Profiled: totalWithLanguages,
+          Missing: contacts.length - totalWithLanguages,
+          'Completion Rate': `${((totalWithLanguages / contacts.length) * 100).toFixed(1)}%`,
+        },
+      }
     }
 
-    return null;
-  };
+    return null
+  }
 
   const analyzeGoalAlignment = () => {
-    const insights = [];
-    const personalGoals = [];
-    const professionalGoals = [];
+    const insights = []
+    const personalGoals = []
+    const professionalGoals = []
 
-    contacts.forEach(contact => {
+    contacts.forEach((contact) => {
       if (contact.personalGoals) {
-        personalGoals.push({ name: contact.name, goals: contact.personalGoals });
+        personalGoals.push({ name: contact.name, goals: contact.personalGoals })
       }
       if (contact.professionalGoals) {
-        professionalGoals.push({ name: contact.name, goals: contact.professionalGoals });
+        professionalGoals.push({ name: contact.name, goals: contact.professionalGoals })
       }
-    });
+    })
 
     // Look for collaboration opportunities
     if (professionalGoals.length >= 2) {
@@ -209,32 +215,33 @@ const StrategicInsights = ({ contacts, userProfile }) => {
         title: 'Hidden Collaboration Opportunities',
         priority: 'high',
         insight: `${professionalGoals.length} friends have shared their professional goals. There are likely hidden synergies and collaboration opportunities.`,
-        recommendation: 'Analyze goal overlaps to facilitate introductions and create mutual value for your network.',
+        recommendation:
+          'Analyze goal overlaps to facilitate introductions and create mutual value for your network.',
         actions: [
           'Map out complementary skills and goals between friends',
           'Facilitate strategic introductions between friends with aligned goals',
-          'Organize group activities around shared professional interests'
+          'Organize group activities around shared professional interests',
         ],
-        data: professionalGoals.slice(0, 5) // Show first 5 for preview
-      });
+        data: professionalGoals.slice(0, 5), // Show first 5 for preview
+      })
     }
 
-    return insights;
-  };
+    return insights
+  }
 
   const analyzeNetworkingOpportunities = () => {
-    const insights = [];
-    const expertise = [];
-    const helpNeeded = [];
+    const insights = []
+    const expertise = []
+    const helpNeeded = []
 
-    contacts.forEach(contact => {
+    contacts.forEach((contact) => {
       if (contact.theirExpertise) {
-        expertise.push({ name: contact.name, expertise: contact.theirExpertise });
+        expertise.push({ name: contact.name, expertise: contact.theirExpertise })
       }
       if (contact.howTheyCanHelp) {
-        helpNeeded.push({ name: contact.name, help: contact.howTheyCanHelp });
+        helpNeeded.push({ name: contact.name, help: contact.howTheyCanHelp })
       }
-    });
+    })
 
     if (expertise.length >= 3) {
       insights.push({
@@ -243,24 +250,25 @@ const StrategicInsights = ({ contacts, userProfile }) => {
         title: 'Expertise Network Goldmine',
         priority: 'high',
         insight: `Your network contains ${expertise.length} documented areas of expertise. This represents massive untapped value.`,
-        recommendation: 'Become the connector in your network. Facilitate introductions and create value by matching expertise with needs.',
+        recommendation:
+          'Become the connector in your network. Facilitate introductions and create value by matching expertise with needs.',
         actions: [
           'Create a private expertise directory of your network',
           'Proactively make introductions when you spot synergies',
-          'Host networking events that showcase your friends\' expertise'
+          "Host networking events that showcase your friends' expertise",
         ],
-        data: expertise.slice(0, 5)
-      });
+        data: expertise.slice(0, 5),
+      })
     }
 
-    return insights;
-  };
+    return insights
+  }
 
   const analyzeRelationshipHealth = () => {
-    const insights = [];
-    const incomplete = contacts.filter(contact => 
-      !contact.loveLanguage || !contact.personalGoals || !contact.howICanHelp
-    );
+    const insights = []
+    const incomplete = contacts.filter(
+      (contact) => !contact.loveLanguage || !contact.personalGoals || !contact.howICanHelp,
+    )
 
     if (incomplete.length > contacts.length * 0.5) {
       insights.push({
@@ -269,17 +277,18 @@ const StrategicInsights = ({ contacts, userProfile }) => {
         title: 'Relationship Profile Completion',
         priority: 'medium',
         insight: `${incomplete.length} of ${contacts.length} friend profiles are incomplete. Missing data limits relationship optimization potential.`,
-        recommendation: 'Gradually complete friend profiles through natural conversations. Each data point unlocks better strategic insights.',
+        recommendation:
+          'Gradually complete friend profiles through natural conversations. Each data point unlocks better strategic insights.',
         actions: [
           'Set a goal to complete 1-2 profiles per week through casual conversations',
           'Use the AI chat feature to get suggestions for gathering missing data',
-          'Focus on completing Inner Circle profiles first for maximum impact'
-        ]
-      });
+          'Focus on completing Inner Circle profiles first for maximum impact',
+        ],
+      })
     }
 
-    return insights;
-  };
+    return insights
+  }
 
   const analyzeNetwork = () => {
     const analysis = {
@@ -287,66 +296,76 @@ const StrategicInsights = ({ contacts, userProfile }) => {
       categories: {},
       loveLanguageDistribution: {},
       topExpertise: [],
-      networkValue: calculateNetworkValue()
-    };
+      networkValue: calculateNetworkValue(),
+    }
 
     // Category breakdown
-    contacts.forEach(contact => {
-      const cat = contact.category || 'Regular Friends';
-      analysis.categories[cat] = (analysis.categories[cat] || 0) + 1;
-    });
+    contacts.forEach((contact) => {
+      const cat = contact.category || 'Regular Friends'
+      analysis.categories[cat] = (analysis.categories[cat] || 0) + 1
+    })
 
     // Love language distribution
-    contacts.forEach(contact => {
+    contacts.forEach((contact) => {
       if (contact.loveLanguage) {
-        analysis.loveLanguageDistribution[contact.loveLanguage] = 
-          (analysis.loveLanguageDistribution[contact.loveLanguage] || 0) + 1;
+        analysis.loveLanguageDistribution[contact.loveLanguage] =
+          (analysis.loveLanguageDistribution[contact.loveLanguage] || 0) + 1
       }
-    });
+    })
 
-    setNetworkAnalysis(analysis);
-  };
+    setNetworkAnalysis(analysis)
+  }
 
   const calculateNetworkValue = () => {
-    let score = 0;
-    
-    contacts.forEach(contact => {
+    let score = 0
+
+    contacts.forEach((contact) => {
       // Base points for each friend
-      score += 10;
-      
+      score += 10
+
       // Bonus for complete profiles
-      if (contact.loveLanguage) score += 15;
-      if (contact.personalGoals) score += 10;
-      if (contact.theirExpertise) score += 20;
-      if (contact.howICanHelp) score += 15;
-      
+      if (contact.loveLanguage) score += 15
+      if (contact.personalGoals) score += 10
+      if (contact.theirExpertise) score += 20
+      if (contact.howICanHelp) score += 15
+
       // Category multipliers
-      if (contact.category === 'Inner Circle') score += 30;
-      if (contact.category === 'Business') score += 25;
-    });
-    
-    return score;
-  };
+      if (contact.category === 'Inner Circle') score += 30
+      if (contact.category === 'Business') score += 25
+    })
+
+    return score
+  }
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'high': return '#e74c3c';
-      case 'medium': return '#f39c12';
-      case 'low': return '#27ae60';
-      default: return '#3498db';
+      case 'high':
+        return '#e74c3c'
+      case 'medium':
+        return '#f39c12'
+      case 'low':
+        return '#27ae60'
+      default:
+        return '#3498db'
     }
-  };
+  }
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'balance': return '⚖️';
-      case 'communication': return '💬';
-      case 'optimization': return '🚀';
-      case 'opportunity': return '💎';
-      case 'health': return '🩺';
-      default: return '🧠';
+      case 'balance':
+        return '⚖️'
+      case 'communication':
+        return '💬'
+      case 'optimization':
+        return '🚀'
+      case 'opportunity':
+        return '💎'
+      case 'health':
+        return '🩺'
+      default:
+        return '🧠'
     }
-  };
+  }
 
   return (
     <div className="strategic-insights">
@@ -367,7 +386,9 @@ const StrategicInsights = ({ contacts, userProfile }) => {
               <div className="card-label">Network Value Score</div>
             </div>
             <div className="overview-card">
-              <div className="card-value">{Object.keys(networkAnalysis.loveLanguageDistribution).length}</div>
+              <div className="card-value">
+                {Object.keys(networkAnalysis.loveLanguageDistribution).length}
+              </div>
               <div className="card-label">Love Languages Mapped</div>
             </div>
             <div className="overview-card">
@@ -379,9 +400,9 @@ const StrategicInsights = ({ contacts, userProfile }) => {
       )}
 
       <div className="insights-grid">
-        {insights.map(insight => (
-          <div 
-            key={insight.id} 
+        {insights.map((insight) => (
+          <div
+            key={insight.id}
             className="insight-card"
             onClick={() => setSelectedInsight(insight)}
           >
@@ -389,7 +410,7 @@ const StrategicInsights = ({ contacts, userProfile }) => {
               <div className="insight-icon">{getTypeIcon(insight.type)}</div>
               <div className="insight-title-section">
                 <h3>{insight.title}</h3>
-                <span 
+                <span
                   className="insight-priority"
                   style={{ backgroundColor: getPriorityColor(insight.priority) }}
                 >
@@ -420,23 +441,27 @@ const StrategicInsights = ({ contacts, userProfile }) => {
 
       {selectedInsight && (
         <div className="insight-modal-overlay" onClick={() => setSelectedInsight(null)}>
-          <div className="insight-modal" onClick={e => e.stopPropagation()}>
+          <div className="insight-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{getTypeIcon(selectedInsight.type)} {selectedInsight.title}</h2>
-              <button onClick={() => setSelectedInsight(null)} className="close-button">×</button>
+              <h2>
+                {getTypeIcon(selectedInsight.type)} {selectedInsight.title}
+              </h2>
+              <button onClick={() => setSelectedInsight(null)} className="close-button">
+                ×
+              </button>
             </div>
-            
+
             <div className="modal-content">
               <div className="insight-section">
                 <h3>📊 Analysis</h3>
                 <p>{selectedInsight.insight}</p>
               </div>
-              
+
               <div className="insight-section">
                 <h3>💡 Strategic Recommendation</h3>
                 <p>{selectedInsight.recommendation}</p>
               </div>
-              
+
               <div className="insight-section">
                 <h3>🎯 Action Steps</h3>
                 <ul>
@@ -477,7 +502,7 @@ const StrategicInsights = ({ contacts, userProfile }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default StrategicInsights;
+export default StrategicInsights

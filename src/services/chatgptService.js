@@ -2,35 +2,35 @@
 
 class ChatGPTService {
   constructor() {
-    this.apiKey = null; // Will be set by user in settings
-    this.baseURL = 'https://api.openai.com/v1/chat/completions';
+    this.apiKey = null // Will be set by user in settings
+    this.baseURL = 'https://api.openai.com/v1/chat/completions'
   }
 
   setApiKey(apiKey) {
-    this.apiKey = apiKey;
-    localStorage.setItem('friendsync_openai_key', apiKey);
+    this.apiKey = apiKey
+    localStorage.setItem('friendsync_openai_key', apiKey)
   }
 
   getApiKey() {
     if (!this.apiKey) {
-      this.apiKey = localStorage.getItem('friendsync_openai_key');
+      this.apiKey = localStorage.getItem('friendsync_openai_key')
     }
-    return this.apiKey;
+    return this.apiKey
   }
 
   async generateFriendshipSuggestions(friend, userProfile, context = {}) {
     if (!this.getApiKey()) {
-      throw new Error('OpenAI API key not configured');
+      throw new Error('OpenAI API key not configured')
     }
 
-    const prompt = this.buildSuggestionPrompt(friend, userProfile, context);
+    const prompt = this.buildSuggestionPrompt(friend, userProfile, context)
 
     try {
       const response = await fetch(this.baseURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getApiKey()}`
+          Authorization: `Bearer ${this.getApiKey()}`,
         },
         body: JSON.stringify({
           model: 'gpt-4',
@@ -40,31 +40,31 @@ class ChatGPTService {
               content: `You are an expert friendship coach helping ${userProfile.name} become the ultimate energy-giver. 
                        You understand personality types, love languages, and optimal relationship dynamics.
                        Provide specific, actionable suggestions based on the friend's profile and ${userProfile.name}'s strengths.
-                       Format responses as JSON with specific suggestions.`
+                       Format responses as JSON with specific suggestions.`,
             },
             {
               role: 'user',
-              content: prompt
-            }
+              content: prompt,
+            },
           ],
           max_tokens: 800,
-          temperature: 0.7
-        })
-      });
+          temperature: 0.7,
+        }),
+      })
 
       if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
+        throw new Error(`OpenAI API error: ${response.status}`)
       }
 
-      const data = await response.json();
-      return this.parseSuggestionResponse(data.choices[0].message.content);
+      const data = await response.json()
+      return this.parseSuggestionResponse(data.choices[0].message.content)
     } catch (error) {
-      console.error('ChatGPT API Error:', error);
-      throw error;
+      console.error('ChatGPT API Error:', error)
+      throw error
     }
   }
 
-  buildSuggestionPrompt(friend, userProfile, context) {
+  buildSuggestionPrompt(friend, userProfile, _context) {
     return `
 FRIENDSHIP OPTIMIZATION REQUEST
 
@@ -109,142 +109,146 @@ Return JSON format:
   "connectionOpportunities": ["People/opportunities to introduce them to"],
   "personalGrowth": ["How this friendship can help ${userProfile.name} grow"],
   "energyOptimization": ["Best ways to interact based on both personalities"]
-}`;
+}`
   }
 
   parseSuggestionResponse(response) {
     try {
       // Try to parse as JSON first
-      return JSON.parse(response);
-    } catch (error) {
+      return JSON.parse(response)
+    } catch (_error) {
       // If not valid JSON, parse manually and structure
       return {
-        immediateActions: ["Connect with them this week", "Send a thoughtful message", "Share something relevant to their interests"],
-        weeklyTouchpoints: ["Regular check-in based on their preferred method"],
-        monthlyDeepening: ["Plan a deeper conversation or activity"],
-        giftIdeas: ["Something personalized based on their profile"],
-        conversationStarters: ["Ask about their current goals", "Discuss their interests"],
-        supportOpportunities: ["Offer help with their mentioned challenges"],
-        connectionOpportunities: ["Introduce relevant contacts"],
-        personalGrowth: ["Reflect on what you can learn from them"],
-        energyOptimization: ["Match their communication style and energy"]
-      };
+        immediateActions: [
+          'Connect with them this week',
+          'Send a thoughtful message',
+          'Share something relevant to their interests',
+        ],
+        weeklyTouchpoints: ['Regular check-in based on their preferred method'],
+        monthlyDeepening: ['Plan a deeper conversation or activity'],
+        giftIdeas: ['Something personalized based on their profile'],
+        conversationStarters: ['Ask about their current goals', 'Discuss their interests'],
+        supportOpportunities: ['Offer help with their mentioned challenges'],
+        connectionOpportunities: ['Introduce relevant contacts'],
+        personalGrowth: ['Reflect on what you can learn from them'],
+        energyOptimization: ['Match their communication style and energy'],
+      }
     }
   }
 
   async generateGoalSupportSuggestions(friend, userProfile) {
     if (!friend.currentGoals?.length) {
-      return { suggestions: ["Ask them about their current goals and how you can support"] };
+      return { suggestions: ['Ask them about their current goals and how you can support'] }
     }
 
     const context = {
       focus: 'goal_support',
-      goals: friend.currentGoals
-    };
+      goals: friend.currentGoals,
+    }
 
-    return this.generateFriendshipSuggestions(friend, userProfile, context);
+    return this.generateFriendshipSuggestions(friend, userProfile, context)
   }
 
   async generateChallengeSupport(friend, userProfile) {
     if (!friend.challenges?.length) {
-      return { suggestions: ["Ask if they're facing any challenges you could help with"] };
+      return { suggestions: ["Ask if they're facing any challenges you could help with"] }
     }
 
     const context = {
       focus: 'challenge_support',
-      challenges: friend.challenges
-    };
+      challenges: friend.challenges,
+    }
 
-    return this.generateFriendshipSuggestions(friend, userProfile, context);
+    return this.generateFriendshipSuggestions(friend, userProfile, context)
   }
 
   async generateNetworkingOpportunities(friend, userProfile) {
     const context = {
       focus: 'networking',
       userBusiness: userProfile.businessExpertise,
-      friendInterests: friend.interests
-    };
+      friendInterests: friend.interests,
+    }
 
-    return this.generateFriendshipSuggestions(friend, userProfile, context);
+    return this.generateFriendshipSuggestions(friend, userProfile, context)
   }
 
   // Quick suggestions without API call for offline mode
-  getOfflineSuggestions(friend, userProfile) {
+  getOfflineSuggestions(friend, _userProfile) {
     const suggestions = {
       immediateActions: [],
       weeklyTouchpoints: [],
       conversationStarters: [],
       giftIdeas: [],
-      supportOpportunities: []
-    };
+      supportOpportunities: [],
+    }
 
     // Love language based suggestions
     switch (friend.loveLanguage) {
       case 'Quality Time':
-        suggestions.immediateActions.push('Schedule dedicated one-on-one time with them');
-        suggestions.weeklyTouchpoints.push('Regular coffee/call sessions');
-        suggestions.giftIdeas.push('Plan an experience together rather than buying something');
-        break;
+        suggestions.immediateActions.push('Schedule dedicated one-on-one time with them')
+        suggestions.weeklyTouchpoints.push('Regular coffee/call sessions')
+        suggestions.giftIdeas.push('Plan an experience together rather than buying something')
+        break
       case 'Words of Affirmation':
-        suggestions.immediateActions.push('Send encouraging message about their strengths');
-        suggestions.weeklyTouchpoints.push('Share positive feedback or recognition');
-        suggestions.giftIdeas.push('Write a heartfelt note or letter');
-        break;
+        suggestions.immediateActions.push('Send encouraging message about their strengths')
+        suggestions.weeklyTouchpoints.push('Share positive feedback or recognition')
+        suggestions.giftIdeas.push('Write a heartfelt note or letter')
+        break
       case 'Acts of Service':
-        suggestions.immediateActions.push('Offer to help with a specific task');
-        suggestions.weeklyTouchpoints.push('Look for ways to make their life easier');
-        suggestions.giftIdeas.push('Do something helpful for them instead of buying gifts');
-        break;
+        suggestions.immediateActions.push('Offer to help with a specific task')
+        suggestions.weeklyTouchpoints.push('Look for ways to make their life easier')
+        suggestions.giftIdeas.push('Do something helpful for them instead of buying gifts')
+        break
       case 'Physical Touch':
-        suggestions.immediateActions.push('Plan in-person meeting with warm greeting');
-        suggestions.weeklyTouchpoints.push('Make sure to include appropriate physical connection');
-        break;
+        suggestions.immediateActions.push('Plan in-person meeting with warm greeting')
+        suggestions.weeklyTouchpoints.push('Make sure to include appropriate physical connection')
+        break
       case 'Receiving Gifts':
-        suggestions.immediateActions.push('Send thoughtful gift related to their interests');
-        suggestions.weeklyTouchpoints.push('Small thoughtful gestures or tokens');
-        suggestions.giftIdeas.push('Something personalized based on their hobbies');
-        break;
+        suggestions.immediateActions.push('Send thoughtful gift related to their interests')
+        suggestions.weeklyTouchpoints.push('Small thoughtful gestures or tokens')
+        suggestions.giftIdeas.push('Something personalized based on their hobbies')
+        break
       default:
-        suggestions.immediateActions.push('Reach out and check how they\'re doing');
-        suggestions.weeklyTouchpoints.push('Send regular friendly messages');
+        suggestions.immediateActions.push("Reach out and check how they're doing")
+        suggestions.weeklyTouchpoints.push('Send regular friendly messages')
     }
 
     // Goal-based conversation starters
     if (friend.currentGoals?.length) {
-      friend.currentGoals.forEach(goal => {
-        suggestions.conversationStarters.push(`How is your progress on ${goal}?`);
-        suggestions.supportOpportunities.push(`Offer support or resources for ${goal}`);
-      });
+      friend.currentGoals.forEach((goal) => {
+        suggestions.conversationStarters.push(`How is your progress on ${goal}?`)
+        suggestions.supportOpportunities.push(`Offer support or resources for ${goal}`)
+      })
     } else {
-      suggestions.conversationStarters.push('What are you most excited about right now?');
-      suggestions.conversationStarters.push('What goals are you working toward?');
+      suggestions.conversationStarters.push('What are you most excited about right now?')
+      suggestions.conversationStarters.push('What goals are you working toward?')
     }
 
     // Interest-based suggestions
     if (friend.interests?.length) {
-      friend.interests.slice(0, 3).forEach(interest => {
-        suggestions.conversationStarters.push(`What's new in ${interest} that excites you?`);
-        suggestions.giftIdeas.push(`Something related to their ${interest} interest`);
-      });
+      friend.interests.slice(0, 3).forEach((interest) => {
+        suggestions.conversationStarters.push(`What's new in ${interest} that excites you?`)
+        suggestions.giftIdeas.push(`Something related to their ${interest} interest`)
+      })
     } else {
-      suggestions.conversationStarters.push('What hobbies have you been enjoying lately?');
+      suggestions.conversationStarters.push('What hobbies have you been enjoying lately?')
     }
 
     // Challenge-based support
     if (friend.challenges?.length) {
-      friend.challenges.slice(0, 2).forEach(challenge => {
-        suggestions.supportOpportunities.push(`Ask how you can help with ${challenge}`);
-      });
+      friend.challenges.slice(0, 2).forEach((challenge) => {
+        suggestions.supportOpportunities.push(`Ask how you can help with ${challenge}`)
+      })
     }
 
     // Always add these universal suggestions
-    suggestions.immediateActions.push('Send them something that made you think of them');
-    suggestions.weeklyTouchpoints.push('Regular check-ins at their preferred time');
-    suggestions.conversationStarters.push('Ask about their biggest win this week');
-    suggestions.conversationStarters.push('Share something you appreciate about them');
+    suggestions.immediateActions.push('Send them something that made you think of them')
+    suggestions.weeklyTouchpoints.push('Regular check-ins at their preferred time')
+    suggestions.conversationStarters.push('Ask about their biggest win this week')
+    suggestions.conversationStarters.push('Share something you appreciate about them')
 
-    return suggestions;
+    return suggestions
   }
 }
 
-export default new ChatGPTService();
+export default new ChatGPTService()

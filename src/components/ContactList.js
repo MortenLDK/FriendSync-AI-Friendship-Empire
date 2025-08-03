@@ -1,31 +1,32 @@
-import React, { useState } from 'react';
-import AISuggestions from './AISuggestions';
-import RelationshipDesires from './RelationshipDesires';
-import FriendInvitation from './FriendInvitation';
-import FriendChat from './FriendChat';
-import './ContactList.css';
+import { useState } from 'react'
+import AISuggestions from './AISuggestions'
+import FriendChat from './FriendChat'
+import FriendInvitation from './FriendInvitation'
+import RelationshipDesires from './RelationshipDesires'
+import './ContactList.css'
 
 const ContactList = ({ contacts, userProfile }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterCategory, setFilterCategory] = useState('All')
 
-  const categories = ['All', 'Inner Circle', 'Regular Friends', 'Network'];
+  const categories = ['All', 'Inner Circle', 'Regular Friends', 'Network']
 
-  const filteredContacts = contacts.filter(contact => {
-    const matchesSearch = contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.phone.includes(searchTerm);
-    
-    const matchesCategory = filterCategory === 'All' || contact.category === filterCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
+  const filteredContacts = contacts.filter((contact) => {
+    const matchesSearch =
+      contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.phone.includes(searchTerm)
+
+    const matchesCategory = filterCategory === 'All' || contact.category === filterCategory
+
+    return matchesSearch && matchesCategory
+  })
 
   return (
     <div className="contact-list card">
       <div className="contact-list-header">
         <h2>Your Contacts ({contacts.length})</h2>
-        
+
         <div className="controls">
           <div className="search-container">
             <input
@@ -36,14 +37,14 @@ const ContactList = ({ contacts, userProfile }) => {
               className="search-input"
             />
           </div>
-          
+
           <div className="filter-container">
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
               className="filter-select"
             >
-              {categories.map(category => (
+              {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -54,60 +55,60 @@ const ContactList = ({ contacts, userProfile }) => {
       </div>
 
       <div className="contacts-grid">
-        {filteredContacts.map(contact => (
+        {filteredContacts.map((contact) => (
           <ContactCard key={contact.id} contact={contact} userProfile={userProfile} />
         ))}
       </div>
 
       {filteredContacts.length === 0 && (
         <div className="no-contacts">
-          {searchTerm || filterCategory !== 'All' 
-            ? 'No contacts match your search criteria.' 
+          {searchTerm || filterCategory !== 'All'
+            ? 'No contacts match your search criteria.'
             : 'No contacts imported yet.'}
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 const ContactCard = ({ contact, userProfile }) => {
-  const [showAI, setShowAI] = useState(false);
-  const [expandedProfile, setExpandedProfile] = useState(false);
-  const [showRelationshipGoals, setShowRelationshipGoals] = useState(false);
-  const [showFriendChat, setShowFriendChat] = useState(false);
+  const [showAI, setShowAI] = useState(false)
+  const [expandedProfile, setExpandedProfile] = useState(false)
+  const [showRelationshipGoals, setShowRelationshipGoals] = useState(false)
+  const [showFriendChat, setShowFriendChat] = useState(false)
 
   const getCategoryColor = (category) => {
     switch (category) {
-      case 'Inner Circle': return '#e74c3c';
-      case 'Regular Friends': return '#3498db';
-      case 'Network': return '#95a5a6';
-      default: return '#6c757d';
+      case 'Inner Circle':
+        return '#e74c3c'
+      case 'Regular Friends':
+        return '#3498db'
+      case 'Network':
+        return '#95a5a6'
+      default:
+        return '#6c757d'
     }
-  };
+  }
 
-  const handleSuggestionComplete = (contactId, suggestion, category) => {
+  const handleSuggestionComplete = (_contactId, suggestion, _category) => {
     // Track completed suggestions
-    console.log(`Completed suggestion for ${contact.name}:`, suggestion);
-  };
+    console.log(`Completed suggestion for ${contact.name}:`, suggestion)
+  }
 
   return (
     <div className="contact-card">
       <div className="contact-header">
-        <div className="contact-avatar">
-          {contact.name.charAt(0).toUpperCase()}
-        </div>
+        <div className="contact-avatar">{contact.name.charAt(0).toUpperCase()}</div>
         <div className="contact-info">
           <h3 className="contact-name">{contact.name}</h3>
           <div className="contact-badges">
-            <span 
+            <span
               className="contact-category"
               style={{ backgroundColor: getCategoryColor(contact.category) }}
             >
               {contact.category}
             </span>
-            {contact.tier === 'premium' && (
-              <span className="premium-badge">Premium</span>
-            )}
+            {contact.tier === 'premium' && <span className="premium-badge">Premium</span>}
           </div>
         </div>
         <div className="card-actions">
@@ -132,12 +133,14 @@ const ContactCard = ({ contact, userProfile }) => {
           >
             🤖
           </button>
-          {userProfile && userProfile.setupCompleted && (
+          {userProfile?.setupCompleted && (
             <button
               onClick={() => {
                 // Show invitation modal directly
-                const event = new CustomEvent('showInvitation', { detail: { contact, userProfile } });
-                document.dispatchEvent(event);
+                const event = new CustomEvent('showInvitation', {
+                  detail: { contact, userProfile },
+                })
+                document.dispatchEvent(event)
               }}
               className="invite-button"
               title="Invite to FriendSync"
@@ -154,7 +157,7 @@ const ContactCard = ({ contact, userProfile }) => {
           </button>
         </div>
       </div>
-      
+
       <div className="contact-details">
         {/* Basic Contact Info */}
         {contact.email && (
@@ -177,58 +180,60 @@ const ContactCard = ({ contact, userProfile }) => {
             <span className="detail-value">{contact.loveLanguage}</span>
           </div>
         )}
-        
+
         {expandedProfile && (
           <div className="expanded-profile">
             {contact.personalityType && (
               <div className="contact-detail">
                 <span className="detail-label">Personality:</span>
-                <span className="detail-value">{contact.personalityType} {contact.energyStyle}</span>
+                <span className="detail-value">
+                  {contact.personalityType} {contact.energyStyle}
+                </span>
               </div>
             )}
-            
+
             {contact.communicationStyle && (
               <div className="contact-detail">
                 <span className="detail-label">Communication Style:</span>
                 <span className="detail-value">{contact.communicationStyle}</span>
               </div>
             )}
-            
+
             {contact.currentGoals?.length > 0 && (
               <div className="contact-detail">
                 <span className="detail-label">Current Goals:</span>
                 <span className="detail-value">{contact.currentGoals.join(', ')}</span>
               </div>
             )}
-            
+
             {contact.challenges?.length > 0 && (
               <div className="contact-detail">
                 <span className="detail-label">Challenges:</span>
                 <span className="detail-value">{contact.challenges.join(', ')}</span>
               </div>
             )}
-            
+
             {contact.interests?.length > 0 && (
               <div className="contact-detail">
                 <span className="detail-label">Interests:</span>
                 <span className="detail-value">{contact.interests.join(', ')}</span>
               </div>
             )}
-            
+
             {contact.preferredContactMethod && (
               <div className="contact-detail">
                 <span className="detail-label">Preferred Contact:</span>
                 <span className="detail-value">{contact.preferredContactMethod}</span>
               </div>
             )}
-            
+
             {contact.bestTimeToConnect && (
               <div className="contact-detail">
                 <span className="detail-label">Best Time:</span>
                 <span className="detail-value">{contact.bestTimeToConnect}</span>
               </div>
             )}
-            
+
             <div className="contact-detail">
               <span className="detail-label">Relationship Depth:</span>
               <span className="detail-value">{contact.relationshipDepth}</span>
@@ -247,8 +252,8 @@ const ContactCard = ({ contact, userProfile }) => {
       {showRelationshipGoals && (
         <RelationshipDesires
           contact={contact}
-          onUpdate={(contactId, desires) => {
-            console.log(`Updated relationship goals for ${contact.name}:`, desires);
+          onUpdate={(_contactId, desires) => {
+            console.log(`Updated relationship goals for ${contact.name}:`, desires)
           }}
         />
       )}
@@ -261,24 +266,19 @@ const ContactCard = ({ contact, userProfile }) => {
         />
       )}
 
-      {userProfile && userProfile.setupCompleted && (
+      {userProfile?.setupCompleted && (
         <FriendInvitation
           contact={contact}
           userProfile={userProfile}
           onInviteSent={(inviteData) => {
-            console.log(`Invite sent to ${contact.name}:`, inviteData);
+            console.log(`Invite sent to ${contact.name}:`, inviteData)
           }}
         />
       )}
-      
-      {showFriendChat && (
-        <FriendChat
-          friend={contact}
-          onClose={() => setShowFriendChat(false)}
-        />
-      )}
-    </div>
-  );
-};
 
-export default ContactList;
+      {showFriendChat && <FriendChat friend={contact} onClose={() => setShowFriendChat(false)} />}
+    </div>
+  )
+}
+
+export default ContactList

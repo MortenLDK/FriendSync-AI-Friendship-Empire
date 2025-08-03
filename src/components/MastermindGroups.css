@@ -435,29 +435,29 @@
   .mastermind-stats {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .members-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .modal-content {
     margin: 20px;
     max-height: calc(100vh - 40px);
   }
-  
+
   .modal-header {
     padding: 16px 16px 0 16px;
   }
-  
+
   .group-setup {
     padding: 0 16px;
   }
-  
+
   .modal-actions {
     padding: 16px;
     flex-direction: column;
   }
-  
+
   .growth-stats {
     grid-template-columns: 1fr;
     gap: 0.5rem;

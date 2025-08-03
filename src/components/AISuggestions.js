@@ -1,80 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import chatgptService from '../services/chatgptService';
-import './AISuggestions.css';
+import { useEffect, useState } from 'react'
+import chatgptService from '../services/chatgptService'
+import './AISuggestions.css'
 
 const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
-  const [suggestions, setSuggestions] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [apiKey, setApiKey] = useState('');
-  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
+  const [suggestions, setSuggestions] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [apiKey, setApiKey] = useState('')
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false)
 
   useEffect(() => {
-    const savedKey = chatgptService.getApiKey();
+    const savedKey = chatgptService.getApiKey()
     if (savedKey) {
-      setApiKey(savedKey);
+      setApiKey(savedKey)
     } else {
-      setShowApiKeyInput(true);
+      setShowApiKeyInput(true)
     }
-  }, []);
+  }, [])
 
   const handleApiKeySubmit = () => {
     if (apiKey.trim()) {
-      chatgptService.setApiKey(apiKey);
-      setShowApiKeyInput(false);
-      generateSuggestions();
+      chatgptService.setApiKey(apiKey)
+      setShowApiKeyInput(false)
+      generateSuggestions()
     }
-  };
+  }
 
   const generateSuggestions = async () => {
     if (!userProfile) {
-      setError('Please set up your profile first');
-      return;
+      setError('Please set up your profile first')
+      return
     }
 
-    setLoading(true);
-    setError('');
+    setLoading(true)
+    setError('')
 
     try {
-      let suggestionData;
-      
+      let suggestionData
+
       if (chatgptService.getApiKey()) {
         // Use ChatGPT for premium suggestions
-        suggestionData = await chatgptService.generateFriendshipSuggestions(friend, userProfile);
+        suggestionData = await chatgptService.generateFriendshipSuggestions(friend, userProfile)
       } else {
         // Use offline suggestions for free tier
-        suggestionData = chatgptService.getOfflineSuggestions(friend, userProfile);
+        suggestionData = chatgptService.getOfflineSuggestions(friend, userProfile)
       }
-      
-      setSuggestions(suggestionData);
+
+      setSuggestions(suggestionData)
     } catch (err) {
-      setError('Error generating suggestions: ' + err.message);
+      setError(`Error generating suggestions: ${err.message}`)
       // Fallback to offline suggestions
-      const fallbackSuggestions = chatgptService.getOfflineSuggestions(friend, userProfile);
-      setSuggestions(fallbackSuggestions);
+      const fallbackSuggestions = chatgptService.getOfflineSuggestions(friend, userProfile)
+      setSuggestions(fallbackSuggestions)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const completeSuggestion = (suggestion, category) => {
     if (onSuggestionComplete) {
-      onSuggestionComplete(friend.id, suggestion, category);
+      onSuggestionComplete(friend.id, suggestion, category)
     }
-    
+
     // Remove from current suggestions
-    setSuggestions(prev => ({
+    setSuggestions((prev) => ({
       ...prev,
-      [category]: prev[category]?.filter(s => s !== suggestion) || []
-    }));
-  };
+      [category]: prev[category]?.filter((s) => s !== suggestion) || [],
+    }))
+  }
 
   if (showApiKeyInput) {
     return (
       <div className="ai-suggestions card">
         <h3>🚀 Unlock AI-Powered Suggestions (Premium)</h3>
-        <p>Get personalized ChatGPT suggestions for being the ultimate energy-giver to {friend.name}</p>
-        
+        <p>
+          Get personalized ChatGPT suggestions for being the ultimate energy-giver to {friend.name}
+        </p>
+
         <div className="api-key-setup">
           <input
             type="password"
@@ -87,40 +89,54 @@ const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
             <button onClick={handleApiKeySubmit} className="primary-button">
               Enable AI Suggestions
             </button>
-            <button 
+            <button
               onClick={() => {
-                setShowApiKeyInput(false);
-                const offlineSuggestions = chatgptService.getOfflineSuggestions(friend, userProfile);
-                setSuggestions(offlineSuggestions);
-              }} 
+                setShowApiKeyInput(false)
+                const offlineSuggestions = chatgptService.getOfflineSuggestions(friend, userProfile)
+                setSuggestions(offlineSuggestions)
+              }}
               className="secondary-button"
             >
               Try Free Offline Suggestions
             </button>
           </div>
         </div>
-        
+
         <div className="api-key-help">
-          <p><strong>How to get your API key:</strong></p>
+          <p>
+            <strong>How to get your API key:</strong>
+          </p>
           <ol>
-            <li>Visit <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">platform.openai.com/api-keys</a></li>
+            <li>
+              Visit{' '}
+              <a
+                href="https://platform.openai.com/api-keys"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                platform.openai.com/api-keys
+              </a>
+            </li>
             <li>Create a new API key</li>
             <li>Copy and paste it above</li>
           </ol>
-          <p className="note">Your key is stored locally and never shared. You pay OpenAI directly (~$0.01-0.10 per suggestion).</p>
+          <p className="note">
+            Your key is stored locally and never shared. You pay OpenAI directly (~$0.01-0.10 per
+            suggestion).
+          </p>
         </div>
-        
-        <button 
+
+        <button
           onClick={() => {
-            setShowApiKeyInput(false);
-            generateSuggestions();
+            setShowApiKeyInput(false)
+            generateSuggestions()
           }}
           className="secondary-button"
         >
           Use Free Suggestions Instead
         </button>
       </div>
-    );
+    )
   }
 
   return (
@@ -128,25 +144,15 @@ const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
       <div className="suggestions-header">
         <h3>🤖 AI Friendship Suggestions for {friend.name}</h3>
         <div className="suggestion-controls">
-          <button 
-            onClick={generateSuggestions}
-            disabled={loading}
-            className="refresh-button"
-          >
+          <button onClick={generateSuggestions} disabled={loading} className="refresh-button">
             {loading ? '🔄 Generating...' : '🔄 Refresh'}
           </button>
-          
-          {chatgptService.getApiKey() && (
-            <span className="premium-badge">Premium AI</span>
-          )}
+
+          {chatgptService.getApiKey() && <span className="premium-badge">Premium AI</span>}
         </div>
       </div>
 
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
       {suggestions && (
         <div className="suggestions-content">
@@ -156,21 +162,21 @@ const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
             onComplete={(suggestion) => completeSuggestion(suggestion, 'immediateActions')}
             color="#e74c3c"
           />
-          
+
           <SuggestionSection
             title="📅 Weekly Touchpoints"
             suggestions={suggestions.weeklyTouchpoints}
             onComplete={(suggestion) => completeSuggestion(suggestion, 'weeklyTouchpoints')}
             color="#3498db"
           />
-          
+
           <SuggestionSection
             title="💬 Conversation Starters"
             suggestions={suggestions.conversationStarters}
             onComplete={(suggestion) => completeSuggestion(suggestion, 'conversationStarters')}
             color="#2ecc71"
           />
-          
+
           {chatgptService.getApiKey() && suggestions.monthlyDeepening && (
             <SuggestionSection
               title="🌱 Monthly Relationship Deepening"
@@ -179,7 +185,7 @@ const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
               color="#9b59b6"
             />
           )}
-          
+
           {chatgptService.getApiKey() && suggestions.giftIdeas && (
             <SuggestionSection
               title="🎁 Thoughtful Gestures"
@@ -188,7 +194,7 @@ const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
               color="#f39c12"
             />
           )}
-          
+
           {chatgptService.getApiKey() && suggestions.supportOpportunities && (
             <SuggestionSection
               title="🤝 Support Opportunities"
@@ -199,18 +205,18 @@ const AISuggestions = ({ friend, userProfile, onSuggestionComplete }) => {
           )}
         </div>
       )}
-      
+
       {!suggestions && !loading && (
         <div className="no-suggestions">
           <p>Click "Refresh" to generate personalized suggestions for {friend.name}</p>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 const SuggestionSection = ({ title, suggestions, onComplete, color }) => {
-  if (!suggestions || suggestions.length === 0) return null;
+  if (!suggestions || suggestions.length === 0) return null
 
   return (
     <div className="suggestion-section">
@@ -230,7 +236,7 @@ const SuggestionSection = ({ title, suggestions, onComplete, color }) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AISuggestions;
+export default AISuggestions

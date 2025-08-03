@@ -1,96 +1,97 @@
-import React, { useState } from 'react';
-import './MastermindGroups.css';
+import { useState } from 'react'
+import './MastermindGroups.css'
 
 const MastermindGroups = ({ contacts, userProfile }) => {
-  const [selectedContacts, setSelectedContacts] = useState([]);
-  const [groupName, setGroupName] = useState('');
-  const [groupPurpose, setGroupPurpose] = useState('');
-  const [showCreateGroup, setShowCreateGroup] = useState(false);
+  const [selectedContacts, setSelectedContacts] = useState([])
+  const [groupName, setGroupName] = useState('')
+  const [groupPurpose, setGroupPurpose] = useState('')
+  const [showCreateGroup, setShowCreateGroup] = useState(false)
 
   // Identify potential mastermind members based on relationship goals
-  const mastermindPotentials = contacts.filter(contact => {
-    const savedDesires = localStorage.getItem(`relationship_desires_${contact.id}`);
+  const mastermindPotentials = contacts.filter((contact) => {
+    const savedDesires = localStorage.getItem(`relationship_desires_${contact.id}`)
     if (savedDesires) {
-      const desires = JSON.parse(savedDesires);
-      return desires.relationshipGoals?.mastermindPotential || 
-             contact.category === 'Inner Circle' ||
-             desires.relationshipGoals?.longTerm?.some(goal => 
-               goal.includes('Business') || goal.includes('Investment') || goal.includes('Mastermind')
-             );
+      const desires = JSON.parse(savedDesires)
+      return (
+        desires.relationshipGoals?.mastermindPotential ||
+        contact.category === 'Inner Circle' ||
+        desires.relationshipGoals?.longTerm?.some(
+          (goal) =>
+            goal.includes('Business') || goal.includes('Investment') || goal.includes('Mastermind'),
+        )
+      )
     }
-    return contact.category === 'Inner Circle';
-  });
+    return contact.category === 'Inner Circle'
+  })
 
   const handleContactToggle = (contactId) => {
-    setSelectedContacts(prev => 
-      prev.includes(contactId) 
-        ? prev.filter(id => id !== contactId)
-        : [...prev, contactId]
-    );
-  };
+    setSelectedContacts((prev) =>
+      prev.includes(contactId) ? prev.filter((id) => id !== contactId) : [...prev, contactId],
+    )
+  }
 
   const createMastermindGroup = () => {
     const group = {
       id: `mastermind_${Date.now()}`,
       name: groupName,
       purpose: groupPurpose,
-      members: selectedContacts.map(id => contacts.find(c => c.id === id)),
+      members: selectedContacts.map((id) => contacts.find((c) => c.id === id)),
       creator: userProfile,
       created: new Date().toISOString(),
-      status: 'forming'
-    };
+      status: 'forming',
+    }
 
     // Save group
-    const existingGroups = JSON.parse(localStorage.getItem('mastermind_groups') || '[]');
-    existingGroups.push(group);
-    localStorage.setItem('mastermind_groups', JSON.stringify(existingGroups));
+    const existingGroups = JSON.parse(localStorage.getItem('mastermind_groups') || '[]')
+    existingGroups.push(group)
+    localStorage.setItem('mastermind_groups', JSON.stringify(existingGroups))
 
-    console.log('Created mastermind group:', group);
-    setShowCreateGroup(false);
-    setSelectedContacts([]);
-    setGroupName('');
-    setGroupPurpose('');
-  };
+    console.log('Created mastermind group:', group)
+    setShowCreateGroup(false)
+    setSelectedContacts([])
+    setGroupName('')
+    setGroupPurpose('')
+  }
 
   const generateGroupSuggestions = () => {
-    const businessTypes = {};
-    const skillSets = new Set();
-    
-    selectedContacts.forEach(id => {
-      const contact = contacts.find(c => c.id === id);
-      if (contact.interests) {
-        contact.interests.forEach(interest => {
-          businessTypes[interest] = (businessTypes[interest] || 0) + 1;
-          skillSets.add(interest);
-        });
-      }
-    });
+    const businessTypes = {}
+    const skillSets = new Set()
 
-    const suggestions = [];
-    
+    selectedContacts.forEach((id) => {
+      const contact = contacts.find((c) => c.id === id)
+      if (contact.interests) {
+        contact.interests.forEach((interest) => {
+          businessTypes[interest] = (businessTypes[interest] || 0) + 1
+          skillSets.add(interest)
+        })
+      }
+    })
+
+    const suggestions = []
+
     if (skillSets.has('Real Estate') && skillSets.has('Investment')) {
-      suggestions.push('Real Estate Investment Mastermind');
+      suggestions.push('Real Estate Investment Mastermind')
     }
     if (skillSets.has('Technology') && skillSets.has('Entrepreneurship')) {
-      suggestions.push('Tech Entrepreneur Collective');
+      suggestions.push('Tech Entrepreneur Collective')
     }
     if (skillSets.has('Coaching') && skillSets.has('Business')) {
-      suggestions.push('Business Coaching Alliance');
+      suggestions.push('Business Coaching Alliance')
     }
     if (selectedContacts.length >= 3) {
-      suggestions.push('High-Performance Business Mastermind');
-      suggestions.push('Wealth Building Circle');
+      suggestions.push('High-Performance Business Mastermind')
+      suggestions.push('Wealth Building Circle')
     }
 
-    return suggestions;
-  };
+    return suggestions
+  }
 
   return (
     <div className="mastermind-groups card">
       <div className="mastermind-header">
         <h2>🔥 Mastermind Groups</h2>
         <p>Create high-performance circles for systematic growth</p>
-        <button 
+        <button
           onClick={() => setShowCreateGroup(true)}
           className="create-group-button"
           disabled={mastermindPotentials.length < 2}
@@ -105,11 +106,13 @@ const MastermindGroups = ({ contacts, userProfile }) => {
           <div className="stat-label">Mastermind Potentials</div>
         </div>
         <div className="stat-card">
-          <div className="stat-number">{contacts.filter(c => c.category === 'Inner Circle').length}</div>
+          <div className="stat-number">
+            {contacts.filter((c) => c.category === 'Inner Circle').length}
+          </div>
           <div className="stat-label">Inner Circle</div>
         </div>
         <div className="stat-card">
-          <div className="stat-number">{contacts.filter(c => c.tier === 'premium').length}</div>
+          <div className="stat-number">{contacts.filter((c) => c.tier === 'premium').length}</div>
           <div className="stat-label">Premium Connections</div>
         </div>
       </div>
@@ -117,22 +120,20 @@ const MastermindGroups = ({ contacts, userProfile }) => {
       <div className="potential-members">
         <h3>🎯 High-Potential Members</h3>
         <div className="members-grid">
-          {mastermindPotentials.map(contact => (
+          {mastermindPotentials.map((contact) => (
             <div key={contact.id} className="potential-member-card">
               <div className="member-info">
-                <div className="member-avatar">
-                  {contact.name.charAt(0).toUpperCase()}
-                </div>
+                <div className="member-avatar">{contact.name.charAt(0).toUpperCase()}</div>
                 <div className="member-details">
                   <h4>{contact.name}</h4>
                   <div className="member-tags">
-                    {contact.interests?.slice(0, 2).map(interest => (
-                      <span key={interest} className="interest-tag">{interest}</span>
+                    {contact.interests?.slice(0, 2).map((interest) => (
+                      <span key={interest} className="interest-tag">
+                        {interest}
+                      </span>
                     ))}
                   </div>
-                  <div className="member-potential">
-                    Category: {contact.category}
-                  </div>
+                  <div className="member-potential">Category: {contact.category}</div>
                 </div>
               </div>
               <div className="member-value">
@@ -158,10 +159,7 @@ const MastermindGroups = ({ contacts, userProfile }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h3>🚀 Create Mastermind Group</h3>
-              <button 
-                onClick={() => setShowCreateGroup(false)}
-                className="close-button"
-              >
+              <button onClick={() => setShowCreateGroup(false)} className="close-button">
                 ✕
               </button>
             </div>
@@ -190,7 +188,7 @@ const MastermindGroups = ({ contacts, userProfile }) => {
               <div className="member-selection">
                 <label>Select Members ({selectedContacts.length} selected)</label>
                 <div className="selectable-members">
-                  {mastermindPotentials.map(contact => (
+                  {mastermindPotentials.map((contact) => (
                     <label key={contact.id} className="member-selector">
                       <input
                         type="checkbox"
@@ -212,7 +210,7 @@ const MastermindGroups = ({ contacts, userProfile }) => {
                 <div className="group-suggestions">
                   <label>Suggested Group Names</label>
                   <div className="suggestion-buttons">
-                    {generateGroupSuggestions().map(suggestion => (
+                    {generateGroupSuggestions().map((suggestion) => (
                       <button
                         key={suggestion}
                         onClick={() => setGroupName(suggestion)}
@@ -246,13 +244,10 @@ const MastermindGroups = ({ contacts, userProfile }) => {
             </div>
 
             <div className="modal-actions">
-              <button 
-                onClick={() => setShowCreateGroup(false)}
-                className="secondary-button"
-              >
+              <button onClick={() => setShowCreateGroup(false)} className="secondary-button">
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={createMastermindGroup}
                 className="primary-button"
                 disabled={selectedContacts.length < 2 || !groupName}
@@ -264,7 +259,7 @@ const MastermindGroups = ({ contacts, userProfile }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default MastermindGroups;
+export default MastermindGroups

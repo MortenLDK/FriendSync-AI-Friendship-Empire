@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import './FriendInvitation.css';
+import React, { useState } from 'react'
+import './FriendInvitation.css'
 
 const FriendInvitation = ({ contact, userProfile, onInviteSent }) => {
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  const [inviteMessage, setInviteMessage] = useState('');
-  const [inviteType, setInviteType] = useState('relationship_optimization');
-  const [includeMyGoals, setIncludeMyGoals] = useState(true);
+  const [showInviteModal, setShowInviteModal] = useState(false)
+  const [inviteMessage, setInviteMessage] = useState('')
+  const [inviteType, setInviteType] = useState('relationship_optimization')
+  const [includeMyGoals, setIncludeMyGoals] = useState(true)
 
   const generateInviteMessage = () => {
-    const userName = userProfile?.name || 'Your friend';
-    
+    const userName = userProfile?.name || 'Your friend'
+
     const messages = {
       relationship_optimization: `Hey ${contact.name}! 👋
 
@@ -38,7 +38,7 @@ I'd love to invite you to join the platform where we can:
 • Track our collaboration and wins together
 • Potentially form a high-performance mastermind
 
-You bring ${contact.interests?.slice(0,2).join(' and ')} expertise, and I can contribute ${userProfile?.businessExpertise?.slice(0,2).join(' and ')}.
+You bring ${contact.interests?.slice(0, 2).join(' and ')} expertise, and I can contribute ${userProfile?.businessExpertise?.slice(0, 2).join(' and ')}.
 
 Let's systematically unlock our potential together!
 
@@ -50,7 +50,7 @@ Join: [FriendSync Invitation Link]
 
 I'm part of an exclusive network using FriendSync to optimize business relationships and create systematic value for each other.
 
-Given your background in ${contact.interests?.slice(0,2).join(' and ')}, I think you'd be a perfect fit for our optimization-focused community.
+Given your background in ${contact.interests?.slice(0, 2).join(' and ')}, I think you'd be a perfect fit for our optimization-focused community.
 
 The platform helps us:
 • Clearly define what value we can exchange
@@ -62,11 +62,11 @@ Would you be interested in joining our network and exploring how we can support 
 
 Join here: [FriendSync Invitation Link]
 
-- ${userName}`
-    };
+- ${userName}`,
+    }
 
-    return messages[inviteType] || messages.relationship_optimization;
-  };
+    return messages[inviteType] || messages.relationship_optimization
+  }
 
   const sendInvitation = async () => {
     const invitationData = {
@@ -76,31 +76,34 @@ Join here: [FriendSync Invitation Link]
       type: inviteType,
       includeMyGoals,
       timestamp: new Date().toISOString(),
-      inviteId: `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    };
-
-    // In a real app, this would send email/SMS
-    console.log('Sending invitation:', invitationData);
-    
-    // For demo, we'll simulate sending
-    navigator.clipboard.writeText(inviteMessage).then(() => {
-      alert('Invitation copied to clipboard! Share with ' + contact.name);
-    }).catch(() => {
-      alert('Invitation ready to send to ' + contact.name);
-    });
-
-    if (onInviteSent) {
-      onInviteSent(invitationData);
+      inviteId: `invite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     }
 
-    setShowInviteModal(false);
-  };
+    // In a real app, this would send email/SMS
+    console.log('Sending invitation:', invitationData)
+
+    // For demo, we'll simulate sending
+    navigator.clipboard
+      .writeText(inviteMessage)
+      .then(() => {
+        alert(`Invitation copied to clipboard! Share with ${contact.name}`)
+      })
+      .catch(() => {
+        alert(`Invitation ready to send to ${contact.name}`)
+      })
+
+    if (onInviteSent) {
+      onInviteSent(invitationData)
+    }
+
+    setShowInviteModal(false)
+  }
 
   React.useEffect(() => {
     if (showInviteModal) {
-      setInviteMessage(generateInviteMessage());
+      setInviteMessage(generateInviteMessage())
     }
-  }, [showInviteModal, inviteType]);
+  }, [showInviteModal, generateInviteMessage])
 
   return (
     <>
@@ -117,10 +120,7 @@ Join here: [FriendSync Invitation Link]
           <div className="invite-modal">
             <div className="modal-header">
               <h3>🚀 Invite {contact.name} to FriendSync</h3>
-              <button 
-                onClick={() => setShowInviteModal(false)}
-                className="close-button"
-              >
+              <button onClick={() => setShowInviteModal(false)} className="close-button">
                 ✕
               </button>
             </div>
@@ -197,7 +197,10 @@ Join here: [FriendSync Invitation Link]
               <div className="viral-potential">
                 <div className="viral-info">
                   <h4>🌟 Viral Growth Potential</h4>
-                  <p>When {contact.name} joins and invites their network, you'll get access to optimize relationships with their connections too!</p>
+                  <p>
+                    When {contact.name} joins and invites their network, you'll get access to
+                    optimize relationships with their connections too!
+                  </p>
                   <div className="viral-stats">
                     <div className="stat">
                       <strong>Network Expansion</strong>
@@ -213,16 +216,10 @@ Join here: [FriendSync Invitation Link]
             </div>
 
             <div className="modal-actions">
-              <button 
-                onClick={() => setShowInviteModal(false)}
-                className="secondary-button"
-              >
+              <button onClick={() => setShowInviteModal(false)} className="secondary-button">
                 Cancel
               </button>
-              <button 
-                onClick={sendInvitation}
-                className="primary-button"
-              >
+              <button onClick={sendInvitation} className="primary-button">
                 🚀 Send Invitation
               </button>
             </div>
@@ -230,7 +227,7 @@ Join here: [FriendSync Invitation Link]
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default FriendInvitation;
+export default FriendInvitation
