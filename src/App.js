@@ -8,6 +8,7 @@ import MastermindGroups from './components/MastermindGroups'
 import RelationshipActionScheduler from './components/RelationshipActionScheduler'
 import StrategicInsights from './components/StrategicInsights'
 import UserProfile from './components/UserProfile'
+import { hybridSaveProfile, hybridGetProfile, hybridSaveContacts, hybridGetContacts, isSupabaseConfigured } from './services/supabaseService'
 
 function App() {
   const [contacts, setContacts] = useState([])
@@ -21,154 +22,99 @@ function App() {
 
   useEffect(() => {
     if (isLoaded && user) {
-      // Migration function to handle data from previous deployments
-      const migrateUserData = () => {
+      const loadUserData = async () => {
         const userEmail = user.emailAddresses[0]?.emailAddress
+        
+        console.log(`🚀 Loading data for user: ${user.id}`)
+        console.log(`📧 Email: ${userEmail}`)
+        console.log(`🏢 Supabase configured: ${isSupabaseConfigured()}`)
 
-        // Try to find user data with ALL possible keys (MAXIMUM RECOVERY)
-        const possibleKeys = [
-          `friendsync_user_profile_${user.id}`,
-          `user_profile_${user.id}`,
-          `profile_${user.id}`,
-          // Email-based backup keys
-          userEmail ? `friendsync_backup_profile_${userEmail}` : null,
-          userEmail ? `friendsync_profile_permanent_${userEmail}` : null,
-          // Session backup
-          'friendsync_session_profile',
-        ].filter(Boolean)
-
-        let foundProfile = null
-        for (const key of possibleKeys) {
-          const data = localStorage.getItem(key)
-          if (data) {
-            try {
-              foundProfile = JSON.parse(data)
-              // Standardize the key
-              if (key !== `friendsync_user_profile_${user.id}`) {
-                localStorage.setItem(`friendsync_user_profile_${user.id}`, data)
-                // Don't remove backup keys, keep them for redundancy
-                if (!key.includes('backup')) {
-                  localStorage.removeItem(key) // Clean up old non-backup keys
-                }
-              }
-              break
-            } catch (e) {
-              console.log('Failed to parse profile data:', e)
+        try {
+          // Load user profile (Supabase first, localStorage fallback)
+          const savedProfile = await hybridGetProfile(user.id, userEmail)
+          
+          if (savedProfile) {
+            setUserProfile(savedProfile)
+            if (!savedProfile.setupCompleted) {
+              setShowUserProfile(true)
             }
-          }
-        }
-
-        // Try to find contacts with ALL possible keys (MAXIMUM RECOVERY)
-        const contactKeys = [
-          `friendsync_contacts_${user.id}`,
-          `contacts_${user.id}`,
-          `user_contacts_${user.id}`,
-          // Email-based backup keys
-          userEmail ? `friendsync_backup_contacts_${userEmail}` : null,
-          // Emergency timestamp backups (find latest)
-          ...Object.keys(localStorage).filter(key => key.startsWith('friendsync_emergency_contacts_')),
-        ].filter(Boolean)
-
-        let foundContacts = null
-        for (const key of contactKeys) {
-          const data = localStorage.getItem(key)
-          if (data) {
-            try {
-              foundContacts = JSON.parse(data)
-              // Standardize the key
-              if (key !== `friendsync_contacts_${user.id}`) {
-                localStorage.setItem(`friendsync_contacts_${user.id}`, data)
-                // Don't remove backup keys, keep them for redundancy
-                if (!key.includes('backup')) {
-                  localStorage.removeItem(key) // Clean up old non-backup keys
-                }
-              }
-              break
-            } catch (e) {
-              console.log('Failed to parse contacts data:', e)
+            console.log('✅ User profile loaded successfully')
+          } else {
+            // Create initial profile from Clerk user data
+            const initialProfile = {
+              clerkUserId: user.id,
+              name: user.fullName || user.firstName || 'User',
+              email: userEmail || '',
+              setupCompleted: false,
+              dateCreated: new Date().toISOString(),
             }
+            setUserProfile(initialProfile)
+            setShowUserProfile(true)
+            console.log('🆕 Created new user profile')
           }
-        }
 
-        return { profile: foundProfile, contacts: foundContacts }
+          // Load contacts (Supabase first, localStorage fallback)
+          const savedContacts = await hybridGetContacts(user.id, userEmail)
+          
+          if (savedContacts && Array.isArray(savedContacts) && savedContacts.length > 0) {
+            setContacts(savedContacts)
+            console.log(`✅ ${savedContacts.length} contacts loaded successfully`)
+          } else {
+            console.log('📭 No contacts found')
+          }
+
+        } catch (error) {
+          console.error('❌ Error loading user data:', error)
+          // Fallback to localStorage-only mode
+          console.log('🔄 Falling back to localStorage-only mode')
+        }
       }
 
-      // Attempt data migration
-      const { profile: savedProfile, contacts: savedContacts } = migrateUserData()
-
-      // Check if user profile exists for this Clerk user
-      if (savedProfile) {
-        setUserProfile(savedProfile)
-        if (!savedProfile.setupCompleted) {
-          setShowUserProfile(true)
-        }
-      } else {
-        // Create initial profile from Clerk user data
-        const initialProfile = {
-          clerkUserId: user.id,
-          name: user.fullName || user.firstName || 'User',
-          email: user.emailAddresses[0]?.emailAddress || '',
-          setupCompleted: false,
-          dateCreated: new Date().toISOString(),
-        }
-        setUserProfile(initialProfile)
-        setShowUserProfile(true)
-      }
-
-      // Load saved contacts for this user
-      if (savedContacts && Array.isArray(savedContacts)) {
-        setContacts(savedContacts)
-      }
+      loadUserData()
     }
   }, [user, isLoaded])
 
-  const handleContactsImported = (importedContacts) => {
+  const handleContactsImported = async (importedContacts) => {
     setContacts(importedContacts)
-    // TRIPLE REDUNDANCY BACKUP SYSTEM FOR IMPORTS
+    
     if (user) {
-      const contactsData = JSON.stringify(importedContacts)
-      
-      // Primary storage with user ID
-      localStorage.setItem(`friendsync_contacts_${user.id}`, contactsData)
-      
-      // Email-based backup
-      if (userProfile?.email) {
-        localStorage.setItem(`friendsync_backup_contacts_${userProfile.email}`, contactsData)
+      try {
+        const result = await hybridSaveContacts(importedContacts, user.id, userProfile?.email)
+        console.log('✅ Contacts imported with hybrid storage:', {
+          localStorage: result.localStorage,
+          supabase: result.supabase,
+          error: result.error
+        })
+      } catch (error) {
+        console.error('❌ Error saving imported contacts:', error)
       }
-      
-      // Emergency backup with timestamp
-      localStorage.setItem(`friendsync_emergency_contacts_${Date.now()}`, contactsData)
-      
-      console.log('✅ Contacts imported with MAXIMUM redundancy - NEVER LOSE DATA')
     }
   }
 
   const handleContactAdded = async (newContact) => {
     const updatedContacts = [...contacts, newContact]
     setContacts(updatedContacts)
-    // TRIPLE REDUNDANCY BACKUP SYSTEM
+    
     if (user) {
-      const contactsData = JSON.stringify(updatedContacts)
-      
-      // Primary storage with user ID
-      localStorage.setItem(`friendsync_contacts_${user.id}`, contactsData)
-      
-      // Email-based backup
-      if (userProfile?.email) {
-        localStorage.setItem(`friendsync_backup_contacts_${userProfile.email}`, contactsData)
-      }
-      
-      // Universal timestamp backup (emergency recovery)
-      localStorage.setItem(`friendsync_emergency_contacts_${Date.now()}`, contactsData)
-      
-      // Automatic export trigger on significant data addition
-      if (updatedContacts.length % 5 === 0) { // Every 5 contacts
-        console.log('Auto-backup triggered: Consider exporting your data')
+      try {
+        const result = await hybridSaveContacts(updatedContacts, user.id, userProfile?.email)
+        console.log('✅ Contact added with hybrid storage:', {
+          localStorage: result.localStorage,
+          supabase: result.supabase,
+          error: result.error
+        })
+        
+        // Auto-backup reminder
+        if (updatedContacts.length % 5 === 0) {
+          console.log('📤 Auto-backup reminder: Consider exporting your data')
+        }
+      } catch (error) {
+        console.error('❌ Error saving new contact:', error)
       }
     }
   }
 
-  const handleProfileUpdate = (profile) => {
+  const handleProfileUpdate = async (profile) => {
     const updatedProfile = {
       ...profile,
       clerkUserId: user?.id,
@@ -176,31 +122,20 @@ function App() {
       lastUpdated: new Date().toISOString(),
     }
     setUserProfile(updatedProfile)
-    // MAXIMUM REDUNDANCY PROFILE BACKUP SYSTEM
+    
     if (user) {
-      const profileData = JSON.stringify(updatedProfile)
-      
-      // Primary storage with user ID
-      localStorage.setItem(`friendsync_user_profile_${user.id}`, profileData)
-      
-      // Email-based backup
-      if (updatedProfile.email) {
-        localStorage.setItem(`friendsync_backup_profile_${updatedProfile.email}`, profileData)
+      try {
+        const result = await hybridSaveProfile(updatedProfile, user.id)
+        console.log('✅ Profile updated with hybrid storage:', {
+          localStorage: result.localStorage,
+          supabase: result.supabase,
+          error: result.error
+        })
+      } catch (error) {
+        console.error('❌ Error saving profile update:', error)
       }
-      
-      // Universal profile backup (permanent recovery)
-      localStorage.setItem(`friendsync_profile_permanent_${updatedProfile.email}`, profileData)
-      
-      // Session backup (browser session storage as additional safety)
-      sessionStorage.setItem(`friendsync_session_profile`, profileData)
-      
-      console.log('✅ Profile saved with MAXIMUM redundancy:', {
-        primary: `friendsync_user_profile_${user.id}`,
-        emailBackup: `friendsync_backup_profile_${updatedProfile.email}`,
-        permanent: `friendsync_profile_permanent_${updatedProfile.email}`,
-        session: 'friendsync_session_profile'
-      })
     }
+    
     if (profile.setupCompleted) {
       setShowUserProfile(false)
     }
