@@ -20,12 +20,80 @@ function App() {
 
   useEffect(() => {
     if (isLoaded && user) {
+      // Migration function to handle data from previous deployments
+      const migrateUserData = () => {
+        const userEmail = user.emailAddresses[0]?.emailAddress;
+        
+        // Try to find user data with different possible keys
+        const possibleKeys = [
+          `friendsync_user_profile_${user.id}`,
+          `user_profile_${user.id}`,
+          `profile_${user.id}`,
+          // Try email-based backup keys
+          userEmail ? `friendsync_backup_profile_${userEmail}` : null
+        ].filter(Boolean);
+        
+        let foundProfile = null;
+        for (const key of possibleKeys) {
+          const data = localStorage.getItem(key);
+          if (data) {
+            try {
+              foundProfile = JSON.parse(data);
+              // Standardize the key
+              if (key !== `friendsync_user_profile_${user.id}`) {
+                localStorage.setItem(`friendsync_user_profile_${user.id}`, data);
+                // Don't remove backup keys, keep them for redundancy
+                if (!key.includes('backup')) {
+                  localStorage.removeItem(key); // Clean up old non-backup keys
+                }
+              }
+              break;
+            } catch (e) {
+              console.log('Failed to parse profile data:', e);
+            }
+          }
+        }
+        
+        // Try to find contacts with different possible keys
+        const contactKeys = [
+          `friendsync_contacts_${user.id}`,
+          `contacts_${user.id}`,
+          `user_contacts_${user.id}`,
+          // Try email-based backup keys
+          userEmail ? `friendsync_backup_contacts_${userEmail}` : null
+        ].filter(Boolean);
+        
+        let foundContacts = null;
+        for (const key of contactKeys) {
+          const data = localStorage.getItem(key);
+          if (data) {
+            try {
+              foundContacts = JSON.parse(data);
+              // Standardize the key
+              if (key !== `friendsync_contacts_${user.id}`) {
+                localStorage.setItem(`friendsync_contacts_${user.id}`, data);
+                // Don't remove backup keys, keep them for redundancy
+                if (!key.includes('backup')) {
+                  localStorage.removeItem(key); // Clean up old non-backup keys
+                }
+              }
+              break;
+            } catch (e) {
+              console.log('Failed to parse contacts data:', e);
+            }
+          }
+        }
+        
+        return { profile: foundProfile, contacts: foundContacts };
+      };
+
+      // Attempt data migration
+      const { profile: savedProfile, contacts: savedContacts } = migrateUserData();
+      
       // Check if user profile exists for this Clerk user
-      const savedProfile = localStorage.getItem(`friendsync_user_profile_${user.id}`);
       if (savedProfile) {
-        const profile = JSON.parse(savedProfile);
-        setUserProfile(profile);
-        if (!profile.setupCompleted) {
+        setUserProfile(savedProfile);
+        if (!savedProfile.setupCompleted) {
           setShowUserProfile(true);
         }
       } else {
@@ -42,28 +110,36 @@ function App() {
       }
 
       // Load saved contacts for this user
-      const savedContacts = localStorage.getItem(`friendsync_contacts_${user.id}`);
-      if (savedContacts) {
-        const contactsData = JSON.parse(savedContacts);
-        setContacts(contactsData);
+      if (savedContacts && Array.isArray(savedContacts)) {
+        setContacts(savedContacts);
       }
     }
   }, [user, isLoaded]);
 
   const handleContactsImported = (importedContacts) => {
     setContacts(importedContacts);
-    // Save contacts to user-specific localStorage
+    // Save contacts to user-specific localStorage with backup
     if (user) {
-      localStorage.setItem(`friendsync_contacts_${user.id}`, JSON.stringify(importedContacts));
+      const contactsData = JSON.stringify(importedContacts);
+      localStorage.setItem(`friendsync_contacts_${user.id}`, contactsData);
+      // Backup with email as well
+      if (userProfile?.email) {
+        localStorage.setItem(`friendsync_backup_contacts_${userProfile.email}`, contactsData);
+      }
     }
   };
 
   const handleContactAdded = async (newContact) => {
     const updatedContacts = [...contacts, newContact];
     setContacts(updatedContacts);
-    // Save to user-specific localStorage
+    // Save to user-specific localStorage with backup
     if (user) {
-      localStorage.setItem(`friendsync_contacts_${user.id}`, JSON.stringify(updatedContacts));
+      const contactsData = JSON.stringify(updatedContacts);
+      localStorage.setItem(`friendsync_contacts_${user.id}`, contactsData);
+      // Backup with email as well
+      if (userProfile?.email) {
+        localStorage.setItem(`friendsync_backup_contacts_${userProfile.email}`, contactsData);
+      }
     }
   };
 
@@ -71,12 +147,18 @@ function App() {
     const updatedProfile = {
       ...profile,
       clerkUserId: user?.id,
-      email: user?.emailAddresses[0]?.emailAddress || profile.email
+      email: user?.emailAddresses[0]?.emailAddress || profile.email,
+      lastUpdated: new Date().toISOString()
     };
     setUserProfile(updatedProfile);
-    // Save to user-specific localStorage
+    // Save to multiple keys for redundancy
     if (user) {
-      localStorage.setItem(`friendsync_user_profile_${user.id}`, JSON.stringify(updatedProfile));
+      const profileData = JSON.stringify(updatedProfile);
+      localStorage.setItem(`friendsync_user_profile_${user.id}`, profileData);
+      // Backup with email as well (in case user ID changes)
+      if (updatedProfile.email) {
+        localStorage.setItem(`friendsync_backup_profile_${updatedProfile.email}`, profileData);
+      }
     }
     if (profile.setupCompleted) {
       setShowUserProfile(false);
