@@ -4,6 +4,7 @@ import ContactImporter from './components/ContactImporter';
 import ContactList from './components/ContactList';
 import UserProfile from './components/UserProfile';
 import MastermindGroups from './components/MastermindGroups';
+import AddContactForm from './components/AddContactForm';
 import { SignedIn, SignedOut, UserButton, SignIn, SignUp, useUser } from '@clerk/clerk-react';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const [userProfile, setUserProfile] = useState(null);
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [showAuth, setShowAuth] = useState('signin'); // 'signin' or 'signup'
+  const [showAddContact, setShowAddContact] = useState(false);
   const { user, isLoaded } = useUser();
 
   useEffect(() => {
@@ -53,6 +55,15 @@ function App() {
     }
   };
 
+  const handleContactAdded = async (newContact) => {
+    const updatedContacts = [...contacts, newContact];
+    setContacts(updatedContacts);
+    // Save to user-specific localStorage
+    if (user) {
+      localStorage.setItem(`friendsync_contacts_${user.id}`, JSON.stringify(updatedContacts));
+    }
+  };
+
   const handleProfileUpdate = (profile) => {
     const updatedProfile = {
       ...profile,
@@ -70,18 +81,57 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="app-header">
-        <div className="container">
-          <h1>FriendSync</h1>
-          <p>AI-powered friendship management system</p>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif' }}>
+      <header style={{ 
+        background: 'rgba(255, 255, 255, 0.95)', 
+        backdropFilter: 'blur(10px)', 
+        borderBottom: '1px solid #e2e8f0',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 1rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: '4rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h1 style={{ 
+              fontSize: '1.5rem', 
+              fontWeight: 700, 
+              color: '#0f172a', 
+              margin: 0 
+            }}>FriendSync</h1>
+            <p style={{ 
+              fontSize: '0.875rem', 
+              color: '#64748b', 
+              margin: 0,
+              display: window.innerWidth > 640 ? 'block' : 'none'
+            }}>AI-powered friendship management</p>
+          </div>
           
           <SignedIn>
-            <div className="header-user-section">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               {userProfile && userProfile.setupCompleted && (
                 <button 
                   onClick={() => setShowUserProfile(!showUserProfile)}
-                  className="profile-toggle"
+                  style={{
+                    background: 'transparent',
+                    color: '#64748b',
+                    border: 'none',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.375rem',
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.color = '#0f172a'}
+                  onMouseOut={(e) => e.target.style.color = '#64748b'}
                 >
                   {showUserProfile ? 'Hide Profile' : 'Show Profile'}
                 </button>
@@ -91,16 +141,52 @@ function App() {
           </SignedIn>
           
           <SignedOut>
-            <div className="auth-buttons">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <button 
                 onClick={() => setShowAuth('signup')}
-                className="auth-button signup-button"
+                style={{
+                  background: '#0f172a',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = '#1e293b';
+                  e.target.style.transform = 'translateY(-1px)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = '#0f172a';
+                  e.target.style.transform = 'translateY(0)';
+                }}
               >
                 Sign Up
               </button>
               <button 
                 onClick={() => setShowAuth('signin')}
-                className="auth-button signin-button"
+                style={{
+                  background: 'transparent',
+                  color: '#0f172a',
+                  border: '1px solid #e2e8f0',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = '#f8fafc';
+                  e.target.style.borderColor = '#cbd5e1';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = 'transparent';
+                  e.target.style.borderColor = '#e2e8f0';
+                }}
               >
                 Sign In
               </button>
@@ -109,8 +195,8 @@ function App() {
         </div>
       </header>
       
-      <main className="container">
-        <div className="main-content">
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           <SignedOut>
             <div className="auth-container">
               {showAuth === 'signup' ? (
@@ -144,10 +230,44 @@ function App() {
             
             {(!showUserProfile || (userProfile && userProfile.setupCompleted)) && (
               <>
-                <ContactImporter onContactsImported={handleContactsImported} />
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', marginBottom: '1rem' }}>
+                  <ContactImporter onContactsImported={handleContactsImported} />
+                  <button
+                    onClick={() => setShowAddContact(true)}
+                    style={{
+                      background: '#667eea',
+                      color: 'white',
+                      border: 'none',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.background = '#5a6fd8';
+                      e.target.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.background = '#667eea';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    🧠 Add Friend Profile
+                  </button>
+                </div>
+                
                 {contacts.length > 0 && <ContactList contacts={contacts} userProfile={userProfile} />}
                 {contacts.length > 2 && userProfile && userProfile.setupCompleted && (
                   <MastermindGroups contacts={contacts} userProfile={userProfile} />
+                )}
+                
+                {showAddContact && (
+                  <AddContactForm
+                    onContactAdded={handleContactAdded}
+                    onClose={() => setShowAddContact(false)}
+                  />
                 )}
               </>
             )}
