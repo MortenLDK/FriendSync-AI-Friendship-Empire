@@ -10,7 +10,7 @@ FriendSync is the world's first **systematic friendship optimization platform** 
 - **Real-time synchronization** across all devices and browsers
 - **Enterprise-grade security** with user data isolation
 
-**🚀 LATEST DEPLOYMENT:** [FriendSync App](https://friendsync-4qp4tv3b0-mortenldks-projects.vercel.app)  
+**🚀 LATEST DEPLOYMENT:** Check your Vercel dashboard for current URL (auto-deployed from main branch)  
 **📂 GitHub Repository:** [Source Code](https://github.com/MortenLDK/FriendSync-AI-Friendship-Empire)
 
 ---
@@ -162,7 +162,7 @@ npm run start:mobile
    - Build profiles in Edge → Instantly available in Chrome!
 
 ### Live Demo
-**🌐 Try it now:** [FriendSync Live App](https://friendsync-89ra4fipx-mortenldks-projects.vercel.app)
+**🌐 Try it now:** Check your Vercel dashboard for the latest deployment URL with Supabase integration
 
 ---
 
