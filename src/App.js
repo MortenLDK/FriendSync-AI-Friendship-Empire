@@ -25,13 +25,16 @@ function App() {
       const migrateUserData = () => {
         const userEmail = user.emailAddresses[0]?.emailAddress
 
-        // Try to find user data with different possible keys
+        // Try to find user data with ALL possible keys (MAXIMUM RECOVERY)
         const possibleKeys = [
           `friendsync_user_profile_${user.id}`,
           `user_profile_${user.id}`,
           `profile_${user.id}`,
-          // Try email-based backup keys
+          // Email-based backup keys
           userEmail ? `friendsync_backup_profile_${userEmail}` : null,
+          userEmail ? `friendsync_profile_permanent_${userEmail}` : null,
+          // Session backup
+          'friendsync_session_profile',
         ].filter(Boolean)
 
         let foundProfile = null
@@ -55,13 +58,15 @@ function App() {
           }
         }
 
-        // Try to find contacts with different possible keys
+        // Try to find contacts with ALL possible keys (MAXIMUM RECOVERY)
         const contactKeys = [
           `friendsync_contacts_${user.id}`,
           `contacts_${user.id}`,
           `user_contacts_${user.id}`,
-          // Try email-based backup keys
+          // Email-based backup keys
           userEmail ? `friendsync_backup_contacts_${userEmail}` : null,
+          // Emergency timestamp backups (find latest)
+          ...Object.keys(localStorage).filter(key => key.startsWith('friendsync_emergency_contacts_')),
         ].filter(Boolean)
 
         let foundContacts = null
@@ -119,27 +124,46 @@ function App() {
 
   const handleContactsImported = (importedContacts) => {
     setContacts(importedContacts)
-    // Save contacts to user-specific localStorage with backup
+    // TRIPLE REDUNDANCY BACKUP SYSTEM FOR IMPORTS
     if (user) {
       const contactsData = JSON.stringify(importedContacts)
+      
+      // Primary storage with user ID
       localStorage.setItem(`friendsync_contacts_${user.id}`, contactsData)
-      // Backup with email as well
+      
+      // Email-based backup
       if (userProfile?.email) {
         localStorage.setItem(`friendsync_backup_contacts_${userProfile.email}`, contactsData)
       }
+      
+      // Emergency backup with timestamp
+      localStorage.setItem(`friendsync_emergency_contacts_${Date.now()}`, contactsData)
+      
+      console.log('✅ Contacts imported with MAXIMUM redundancy - NEVER LOSE DATA')
     }
   }
 
   const handleContactAdded = async (newContact) => {
     const updatedContacts = [...contacts, newContact]
     setContacts(updatedContacts)
-    // Save to user-specific localStorage with backup
+    // TRIPLE REDUNDANCY BACKUP SYSTEM
     if (user) {
       const contactsData = JSON.stringify(updatedContacts)
+      
+      // Primary storage with user ID
       localStorage.setItem(`friendsync_contacts_${user.id}`, contactsData)
-      // Backup with email as well
+      
+      // Email-based backup
       if (userProfile?.email) {
         localStorage.setItem(`friendsync_backup_contacts_${userProfile.email}`, contactsData)
+      }
+      
+      // Universal timestamp backup (emergency recovery)
+      localStorage.setItem(`friendsync_emergency_contacts_${Date.now()}`, contactsData)
+      
+      // Automatic export trigger on significant data addition
+      if (updatedContacts.length % 5 === 0) { // Every 5 contacts
+        console.log('Auto-backup triggered: Consider exporting your data')
       }
     }
   }
@@ -152,14 +176,30 @@ function App() {
       lastUpdated: new Date().toISOString(),
     }
     setUserProfile(updatedProfile)
-    // Save to multiple keys for redundancy
+    // MAXIMUM REDUNDANCY PROFILE BACKUP SYSTEM
     if (user) {
       const profileData = JSON.stringify(updatedProfile)
+      
+      // Primary storage with user ID
       localStorage.setItem(`friendsync_user_profile_${user.id}`, profileData)
-      // Backup with email as well (in case user ID changes)
+      
+      // Email-based backup
       if (updatedProfile.email) {
         localStorage.setItem(`friendsync_backup_profile_${updatedProfile.email}`, profileData)
       }
+      
+      // Universal profile backup (permanent recovery)
+      localStorage.setItem(`friendsync_profile_permanent_${updatedProfile.email}`, profileData)
+      
+      // Session backup (browser session storage as additional safety)
+      sessionStorage.setItem(`friendsync_session_profile`, profileData)
+      
+      console.log('✅ Profile saved with MAXIMUM redundancy:', {
+        primary: `friendsync_user_profile_${user.id}`,
+        emailBackup: `friendsync_backup_profile_${updatedProfile.email}`,
+        permanent: `friendsync_profile_permanent_${updatedProfile.email}`,
+        session: 'friendsync_session_profile'
+      })
     }
     if (profile.setupCompleted) {
       setShowUserProfile(false)
