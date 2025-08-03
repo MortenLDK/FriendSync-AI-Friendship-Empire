@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AISuggestions from './AISuggestions';
 import RelationshipDesires from './RelationshipDesires';
 import FriendInvitation from './FriendInvitation';
+import FriendChat from './FriendChat';
 import './ContactList.css';
 
 const ContactList = ({ contacts, userProfile }) => {
@@ -73,6 +74,7 @@ const ContactCard = ({ contact, userProfile }) => {
   const [showAI, setShowAI] = useState(false);
   const [expandedProfile, setExpandedProfile] = useState(false);
   const [showRelationshipGoals, setShowRelationshipGoals] = useState(false);
+  const [showFriendChat, setShowFriendChat] = useState(false);
 
   const getCategoryColor = (category) => {
     switch (category) {
@@ -109,6 +111,13 @@ const ContactCard = ({ contact, userProfile }) => {
           </div>
         </div>
         <div className="card-actions">
+          <button
+            onClick={() => setShowFriendChat(true)}
+            className="chat-button"
+            title="Chat about this friend"
+          >
+            💬
+          </button>
           <button
             onClick={() => setShowRelationshipGoals(!showRelationshipGoals)}
             className={`relationship-button ${showRelationshipGoals ? 'active' : ''}`}
@@ -259,6 +268,13 @@ const ContactCard = ({ contact, userProfile }) => {
           onInviteSent={(inviteData) => {
             console.log(`Invite sent to ${contact.name}:`, inviteData);
           }}
+        />
+      )}
+      
+      {showFriendChat && (
+        <FriendChat
+          friend={contact}
+          onClose={() => setShowFriendChat(false)}
         />
       )}
     </div>

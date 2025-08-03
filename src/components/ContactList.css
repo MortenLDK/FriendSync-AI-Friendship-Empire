@@ -140,7 +140,8 @@
 .ai-button,
 .expand-button,
 .relationship-button,
-.invite-button {
+.invite-button,
+.chat-button {
   background: none;
   border: 2px solid #e9ecef;
   border-radius: 8px;
@@ -158,7 +159,8 @@
 .ai-button:hover,
 .expand-button:hover,
 .relationship-button:hover,
-.invite-button:hover {
+.invite-button:hover,
+.chat-button:hover {
   border-color: #667eea;
   background-color: #f8f9fa;
 }
@@ -186,6 +188,18 @@
   background-color: #e74c3c;
   border-color: #e74c3c;
   transform: scale(1.1);
+}
+
+.chat-button {
+  border-color: #10b981 !important;
+  background-color: #f0fdf4 !important;
+}
+
+.chat-button:hover {
+  border-color: #10b981 !important;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: white;
+  transform: translateY(-1px);
 }
 
 .expanded-profile {
