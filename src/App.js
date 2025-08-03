@@ -5,6 +5,7 @@ import ContactList from './components/ContactList';
 import UserProfile from './components/UserProfile';
 import MastermindGroups from './components/MastermindGroups';
 import AddContactForm from './components/AddContactForm';
+import StrategicInsights from './components/StrategicInsights';
 import { SignedIn, SignedOut, UserButton, SignIn, SignUp, useUser } from '@clerk/clerk-react';
 
 function App() {
@@ -257,6 +258,10 @@ function App() {
                     🧠 Add Friend Profile
                   </button>
                 </div>
+                
+                {contacts.length >= 3 && userProfile && userProfile.setupCompleted && (
+                  <StrategicInsights contacts={contacts} userProfile={userProfile} />
+                )}
                 
                 {contacts.length > 0 && <ContactList contacts={contacts} userProfile={userProfile} />}
                 {contacts.length > 2 && userProfile && userProfile.setupCompleted && (
