@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './ContactImporter.css'
 
-const ContactImporter = ({ onContactsImported }) => {
+const ContactImporter = ({ onContactsImported, currentContacts = [], userProfile }) => {
   const [isImporting, setIsImporting] = useState(false)
   const [importStatus, setImportStatus] = useState('')
   const [isSupported, _setIsSupported] = useState('contacts' in navigator)
@@ -89,7 +89,14 @@ const ContactImporter = ({ onContactsImported }) => {
         let contacts = []
 
         if (file.type === 'application/json') {
-          contacts = JSON.parse(content)
+          const jsonData = JSON.parse(content)
+          
+          // Handle FriendSync export format
+          if (jsonData.contacts && jsonData.userProfile) {
+            contacts = jsonData.contacts
+          } else {
+            contacts = jsonData
+          }
         } else if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
           contacts = parseCSV(content)
         } else {
@@ -147,6 +154,32 @@ const ContactImporter = ({ onContactsImported }) => {
     }
 
     reader.readAsText(file)
+  }
+
+  const exportData = () => {
+    if (!currentContacts || currentContacts.length === 0) {
+      setImportStatus('No contacts to export')
+      return
+    }
+
+    const exportData = {
+      userProfile: userProfile,
+      contacts: currentContacts,
+      exportDate: new Date().toISOString(),
+      version: '1.0'
+    }
+
+    const dataStr = JSON.stringify(exportData, null, 2)
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(dataBlob)
+    
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `friendsync-export-${new Date().toISOString().split('T')[0]}.json`
+    link.click()
+    
+    URL.revokeObjectURL(url)
+    setImportStatus(`Successfully exported ${currentContacts.length} contacts and profile data`)
   }
 
   const parseCSV = (csvContent) => {
@@ -207,6 +240,16 @@ const ContactImporter = ({ onContactsImported }) => {
             Choose File
           </label>
         </div>
+
+        {currentContacts.length > 0 && (
+          <div className="import-option export-option">
+            <h3>Export Data</h3>
+            <p>Export your contacts and profile for backup or transfer to another deployment</p>
+            <button onClick={exportData} className="secondary-button" type="button">
+              📥 Export {currentContacts.length} Contacts
+            </button>
+          </div>
+        )}
       </div>
 
       {importStatus && (

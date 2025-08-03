@@ -483,7 +483,11 @@ function App() {
                       Import contacts from CSV file
                     </p>
                   </div>
-                  <ContactImporter onContactsImported={handleContactsImported} />
+                  <ContactImporter 
+                    onContactsImported={handleContactsImported} 
+                    currentContacts={contacts}
+                    userProfile={userProfile}
+                  />
                 </div>
 
                 {showAddContact && (
