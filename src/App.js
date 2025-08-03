@@ -6,6 +6,7 @@ import UserProfile from './components/UserProfile';
 import MastermindGroups from './components/MastermindGroups';
 import AddContactForm from './components/AddContactForm';
 import StrategicInsights from './components/StrategicInsights';
+import RelationshipActionScheduler from './components/RelationshipActionScheduler';
 import { SignedIn, SignedOut, UserButton, SignIn, SignUp, useUser } from '@clerk/clerk-react';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [showAuth, setShowAuth] = useState('signin'); // 'signin' or 'signup'
   const [showAddContact, setShowAddContact] = useState(false);
+  const [showScheduler, setShowScheduler] = useState(false);
   const { user, isLoaded } = useUser();
 
   useEffect(() => {
@@ -257,6 +259,32 @@ function App() {
                   >
                     🧠 Add Friend Profile
                   </button>
+                  {contacts.length >= 2 && (
+                    <button
+                      onClick={() => setShowScheduler(true)}
+                      style={{
+                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.75rem 1.5rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseOver={(e) => {
+                        e.target.style.transform = 'translateY(-2px)';
+                        e.target.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.3)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.transform = 'translateY(0)';
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    >
+                      📅 Schedule Actions
+                    </button>
+                  )}
                 </div>
                 
                 {contacts.length >= 3 && userProfile && userProfile.setupCompleted && (
@@ -272,6 +300,14 @@ function App() {
                   <AddContactForm
                     onContactAdded={handleContactAdded}
                     onClose={() => setShowAddContact(false)}
+                  />
+                )}
+                
+                {showScheduler && (
+                  <RelationshipActionScheduler
+                    contacts={contacts}
+                    userProfile={userProfile}
+                    onClose={() => setShowScheduler(false)}
                   />
                 )}
               </>
