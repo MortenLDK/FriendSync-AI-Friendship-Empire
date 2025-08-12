@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './FriendChat.css'
+import localAIService from '../services/localAIService'
 
 const FriendChat = ({ friend, onClose }) => {
   const [messages, setMessages] = useState([])
@@ -89,25 +90,40 @@ Some things you could ask:
     setIsLoading(true)
 
     try {
-      // Create the full context for this friend
-      const friendContext = createFriendContext()
-      const _fullPrompt = `${friendContext}\n\nUser Question: ${inputMessage}\n\nProvide a helpful, strategic response about optimizing this friendship:`
-
-      // Use offline AI suggestion logic for now (we'll upgrade to ChatGPT later)
-      const response = generateOfflineResponse(inputMessage, friend)
-
-      const aiMessage = {
+      // Try local GPT-OSS first, fallback to offline responses
+      const aiResponse = await localAIService.generateFriendshipAdvice(friend, inputMessage)
+      
+      let aiMessage = {
         id: Date.now() + 1,
         type: 'ai',
-        content: response,
+        content: aiResponse.content || 'No response generated',
+      }
+
+      // Add privacy indicator based on AI source
+      if (aiResponse.source === 'local-gpt-oss') {
+        aiMessage.privacy = '🔒 Private (Local AI)'
+        aiMessage.content += '\n\n🔒 *Processed locally - your data never left your device*'
+      } else if (aiResponse.source === 'cloud-fallback') {
+        aiMessage.privacy = '☁️ Cloud AI'
+        aiMessage.content += '\n\n☁️ *Processed via cloud service*'
+      } else {
+        // Fallback to offline logic
+        aiMessage.content = generateOfflineResponse(inputMessage, friend)
+        aiMessage.privacy = '⚡ Offline'
+        aiMessage.content += '\n\n⚡ *Generated offline using built-in logic*'
       }
 
       setMessages((prev) => [...prev, aiMessage])
-    } catch (_error) {
+    } catch (error) {
+      console.error('AI chat error:', error)
+      
+      // Final fallback to offline response
+      const offlineResponse = generateOfflineResponse(inputMessage, friend)
       const errorMessage = {
         id: Date.now() + 1,
         type: 'ai',
-        content: 'Sorry, I encountered an error. Please try again.',
+        content: offlineResponse + '\n\n⚡ *Generated offline - AI services temporarily unavailable*',
+        privacy: '⚡ Offline Fallback'
       }
       setMessages((prev) => [...prev, errorMessage])
     } finally {

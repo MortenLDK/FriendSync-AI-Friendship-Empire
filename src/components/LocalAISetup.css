@@ -1,0 +1,279 @@
+.local-ai-setup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.local-ai-setup-modal {
+  background: white;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.setup-header {
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setup-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.close-button:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.setup-content {
+  padding: 2rem;
+}
+
+.status-checking {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.status-installed {
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.status-installed h3 {
+  color: #059669;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ai-benefits, .requirements-section, .benefits-section {
+  text-align: left;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.ai-benefits h4, .requirements-section h4, .benefits-section h4 {
+  margin: 0 0 1rem 0;
+  color: #0f172a;
+  font-size: 1.1rem;
+}
+
+.ai-benefits ul, .benefits-section ul {
+  margin: 0;
+  padding-left: 1rem;
+  list-style: none;
+}
+
+.ai-benefits li, .benefits-section li {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.model-info {
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.model-info p {
+  margin: 0.5rem 0;
+  color: #0f172a;
+}
+
+.continue-button, .show-instructions-btn, .recheck-button, .continue-without-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 1rem 0.5rem;
+  min-width: 180px;
+}
+
+.continue-button:hover, .show-instructions-btn:hover, .recheck-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.continue-without-button {
+  background: #6b7280;
+}
+
+.continue-without-button:hover {
+  background: #4b5563;
+  transform: translateY(-2px);
+}
+
+.info-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.installation-steps {
+  margin: 2rem 0;
+}
+
+.steps-list {
+  margin-top: 1rem;
+}
+
+.installation-step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.step-number {
+  background: #667eea;
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.installation-links {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  justify-content: center;
+}
+
+.download-link, .github-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #0f172a;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.download-link:hover, .github-link:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+.fallback-notice {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.fallback-notice h4 {
+  color: #92400e;
+  margin-bottom: 1rem;
+}
+
+.fallback-notice p {
+  color: #78350f;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .local-ai-setup-modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+  
+  .setup-header {
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+  }
+  
+  .setup-content {
+    padding: 1.5rem;
+  }
+  
+  .installation-links {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .continue-button, .show-instructions-btn, .recheck-button, .continue-without-button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+}

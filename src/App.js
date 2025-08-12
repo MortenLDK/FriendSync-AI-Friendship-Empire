@@ -8,6 +8,7 @@ import MastermindGroups from './components/MastermindGroups'
 import RelationshipActionScheduler from './components/RelationshipActionScheduler'
 import StrategicInsights from './components/StrategicInsights'
 import UserProfile from './components/UserProfile'
+import LocalAISetup from './components/LocalAISetup'
 import { hybridSaveProfile, hybridGetProfile, hybridSaveContacts, hybridGetContacts, isSupabaseConfigured } from './services/supabaseService'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [showAddContact, setShowAddContact] = useState(false)
   const [showScheduler, setShowScheduler] = useState(false)
   const [showDataRecovery, setShowDataRecovery] = useState(false)
+  const [showLocalAISetup, setShowLocalAISetup] = useState(false)
   const { user, isLoaded } = useUser()
 
   useEffect(() => {
@@ -196,24 +198,44 @@ function App() {
           <SignedIn>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               {userProfile?.setupCompleted && (
-                <button
-                  onClick={() => setShowUserProfile(!showUserProfile)}
-                  style={{
-                    background: 'transparent',
-                    color: '#64748b',
-                    border: 'none',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '0.375rem',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                  }}
-                  onMouseOver={(e) => (e.target.style.color = '#0f172a')}
-                  onMouseOut={(e) => (e.target.style.color = '#64748b')}
-                >
-                  {showUserProfile ? 'Hide Profile' : 'Show Profile'}
-                </button>
+                <>
+                  <button
+                    onClick={() => setShowLocalAISetup(true)}
+                    style={{
+                      background: 'transparent',
+                      color: '#64748b',
+                      border: 'none',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '0.375rem',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseOver={(e) => (e.target.style.color = '#0f172a')}
+                    onMouseOut={(e) => (e.target.style.color = '#64748b')}
+                  >
+                    🤖 AI Setup
+                  </button>
+                  <button
+                    onClick={() => setShowUserProfile(!showUserProfile)}
+                    style={{
+                      background: 'transparent',
+                      color: '#64748b',
+                      border: 'none',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '0.375rem',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseOver={(e) => (e.target.style.color = '#0f172a')}
+                    onMouseOut={(e) => (e.target.style.color = '#64748b')}
+                  >
+                    {showUserProfile ? 'Hide Profile' : 'Show Profile'}
+                  </button>
+                </>
               )}
               <UserButton afterSignOutUrl="/" />
             </div>
@@ -478,6 +500,10 @@ function App() {
                     userProfile={userProfile}
                     onClose={() => setShowScheduler(false)}
                   />
+                )}
+
+                {showLocalAISetup && (
+                  <LocalAISetup onClose={() => setShowLocalAISetup(false)} />
                 )}
 
                 {showDataRecovery && (
