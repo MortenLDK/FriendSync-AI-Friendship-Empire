@@ -255,26 +255,13 @@ Some things you could ask:
   const handleOverlayClick = (e) => {
     // Only close if clicking the overlay itself, not the modal content
     if (e.target === e.currentTarget) {
-      e.preventDefault()
-      e.stopPropagation()
       onClose()
     }
   }
 
   return (
-    <div 
-      className="friend-chat-overlay" 
-      onClick={handleOverlayClick}
-      onMouseMove={(e) => e.stopPropagation()}
-      onMouseEnter={(e) => e.stopPropagation()}
-      onMouseLeave={(e) => e.stopPropagation()}
-    >
-      <div 
-        className="friend-chat-modal"
-        onMouseMove={(e) => e.stopPropagation()}
-        onMouseEnter={(e) => e.stopPropagation()}
-        onMouseLeave={(e) => e.stopPropagation()}
-      >
+    <div className="friend-chat-overlay" onClick={handleOverlayClick}>
+      <div className="friend-chat-modal">
         <div className="chat-header">
           <div className="chat-header-info">
             <h2>🤖 Chat about {friend.name}</h2>
@@ -310,19 +297,44 @@ Some things you could ask:
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            onClick={(e) => e.stopPropagation()}
-            onFocus={(e) => e.stopPropagation()}
             placeholder={`Ask me anything about ${friend.name}...`}
             disabled={isLoading}
             rows="2"
+            style={{
+              flex: 1,
+              padding: 'var(--space-4) var(--space-5)',
+              border: '1px solid var(--color-neutral-300)',
+              borderRadius: 'var(--radius-2xl)',
+              fontSize: 'var(--font-size-base)',
+              fontFamily: 'var(--font-sans)',
+              resize: 'none',
+              minHeight: '48px',
+              maxHeight: '120px',
+              lineHeight: '1.5',
+              background: 'var(--color-neutral-0)',
+              color: 'var(--color-neutral-800)',
+              boxShadow: 'var(--shadow-sm)'
+            }}
           />
           <button
-            onClick={(e) => {
-              e.stopPropagation()
-              sendMessage()
-            }}
+            onClick={sendMessage}
             disabled={isLoading || !inputMessage.trim()}
-            className="send-button"
+            style={{
+              background: 'linear-gradient(135deg, var(--color-secondary-500) 0%, var(--color-secondary-600) 100%)',
+              color: 'var(--color-neutral-0)',
+              border: 'none',
+              padding: 'var(--space-4) var(--space-6)',
+              borderRadius: 'var(--radius-2xl)',
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 'var(--font-weight-semibold)',
+              cursor: 'pointer',
+              minWidth: '80px',
+              height: '48px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: 'var(--shadow-success)'
+            }}
           >
             Send
           </button>

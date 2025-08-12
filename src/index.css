@@ -1,66 +1,604 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* FriendSync - MASSIVE Visual Transformation */
+/* Complete design system override for immediate impact */
 
+/* ===== DESIGN TOKENS - WORLD CLASS COLOR SYSTEM ===== */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 84% 4.9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
-  --radius: 0.5rem;
+  /* Primary Brand Colors - Vibrant and Modern */
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+
+  /* Secondary Colors - Teal/Emerald */
+  --color-secondary-50: #f0fdfa;
+  --color-secondary-100: #ccfbf1;
+  --color-secondary-200: #99f6e4;
+  --color-secondary-300: #5eead4;
+  --color-secondary-400: #2dd4bf;
+  --color-secondary-500: #14b8a6;
+  --color-secondary-600: #0d9488;
+  --color-secondary-700: #0f766e;
+
+  /* Neutral Colors */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* Success, Warning, Error */
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+
+  /* Typography System */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing System - 8pt Grid */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* Border Radius */
+  --radius-base: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows - Dramatic Elevation System */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-primary: 0 4px 14px 0 rgb(99 102 241 / 0.3);
+  --shadow-primary-lg: 0 10px 40px 0 rgb(99 102 241 / 0.4);
+  --shadow-success: 0 4px 14px 0 rgb(34 197 94 / 0.3);
+
+  /* Animation System */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
-}
-
+/* ===== GLOBAL RESET & BASE ===== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
-/* Old styles removed - using Tailwind classes instead */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
+  color: var(--color-neutral-800);
+  background: linear-gradient(135deg, var(--color-neutral-0) 0%, var(--color-neutral-50) 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ===== MASSIVE VISUAL IMPACT - APP CONTAINER ===== */
+.App {
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    var(--color-primary-50) 0%, 
+    var(--color-secondary-50) 50%, 
+    var(--color-neutral-0) 100%);
+  position: relative;
+}
+
+.App::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(20, 184, 166, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ===== DRAMATIC HEADER TRANSFORMATION ===== */
+.modern-header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: var(--shadow-lg) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+}
+
+.header-container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 var(--space-6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 4rem !important;
+}
+
+.header-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-4) !important;
+}
+
+.header-title {
+  font-size: var(--font-size-2xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-secondary-600) 100%) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  margin: 0 !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.header-subtitle {
+  font-size: var(--font-size-sm) !important;
+  color: var(--color-neutral-600) !important;
+  font-weight: var(--font-weight-medium) !important;
+  margin: 0 !important;
+}
+
+.header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-3) !important;
+}
+
+/* ===== MASSIVE BUTTON TRANSFORMATION ===== */
+.btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-2) !important;
+  border: none !important;
+  border-radius: var(--radius-2xl) !important;
+  font-family: var(--font-sans) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  cursor: pointer !important;
+  transition: all var(--duration-normal) var(--ease-out) !important;
+  text-decoration: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: var(--shadow-base) !important;
+}
+
+.btn-sm {
+  height: 2rem !important;
+  padding: 0 var(--space-3) !important;
+  font-size: var(--font-size-sm) !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-600) 100%) !important;
+  color: var(--color-neutral-0) !important;
+  box-shadow: var(--shadow-primary) !important;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%) !important;
+  box-shadow: var(--shadow-primary-lg) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--color-secondary-500) 0%, var(--color-secondary-600) 100%) !important;
+  color: var(--color-neutral-0) !important;
+  box-shadow: var(--shadow-success) !important;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, var(--color-secondary-600) 0%, var(--color-secondary-700) 100%) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: var(--color-neutral-700) !important;
+  border: 1px solid var(--color-neutral-300) !important;
+}
+
+.btn-ghost:hover {
+  background: var(--color-neutral-0) !important;
+  color: var(--color-neutral-900) !important;
+  border-color: var(--color-primary-300) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ===== DRAMATIC ACTION BUTTONS ===== */
+.primary-action-btn {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-600) 100%) !important;
+  color: var(--color-neutral-0) !important;
+  border: none !important;
+  padding: var(--space-4) var(--space-6) !important;
+  border-radius: var(--radius-2xl) !important;
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-bold) !important;
+  cursor: pointer !important;
+  transition: all var(--duration-normal) var(--ease-out) !important;
+  box-shadow: var(--shadow-primary) !important;
+  min-width: 200px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-2) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.primary-action-btn::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent) !important;
+  transition: left var(--duration-slow) var(--ease-out) !important;
+}
+
+.primary-action-btn:hover {
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%) !important;
+  box-shadow: var(--shadow-primary-lg) !important;
+  transform: translateY(-4px) scale(1.02) !important;
+}
+
+.primary-action-btn:hover::before {
+  left: 100% !important;
+}
+
+.secondary-action-btn {
+  background: linear-gradient(135deg, var(--color-secondary-500) 0%, var(--color-secondary-600) 100%) !important;
+  color: var(--color-neutral-0) !important;
+  border: none !important;
+  padding: var(--space-4) var(--space-6) !important;
+  border-radius: var(--radius-2xl) !important;
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-bold) !important;
+  cursor: pointer !important;
+  transition: all var(--duration-normal) var(--ease-out) !important;
+  box-shadow: var(--shadow-success) !important;
+  min-width: 200px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-2) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.secondary-action-btn:hover {
+  background: linear-gradient(135deg, var(--color-secondary-600) 0%, var(--color-secondary-700) 100%) !important;
+  transform: translateY(-4px) scale(1.02) !important;
+}
+
+/* ===== MAIN CONTENT TRANSFORMATION ===== */
+.main-content {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: var(--space-8) var(--space-4) !important;
+}
+
+.content-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-8) !important;
+}
+
+.primary-actions {
+  display: flex !important;
+  gap: var(--space-6) !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  margin-bottom: var(--space-12) !important;
+}
+
+/* ===== MASSIVE CONTACT CARD TRANSFORMATION ===== */
+.contact-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-radius: var(--radius-3xl) !important;
+  padding: var(--space-8) !important;
+  transition: all var(--duration-normal) var(--ease-out) !important;
+  box-shadow: var(--shadow-lg) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.contact-card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 6px !important;
+  background: linear-gradient(90deg, var(--color-primary-500) 0%, var(--color-secondary-500) 100%) !important;
+  transform: scaleX(0) !important;
+  transform-origin: left !important;
+  transition: transform var(--duration-normal) var(--ease-out) !important;
+}
+
+.contact-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: var(--shadow-2xl) !important;
+  border-color: var(--color-primary-400) !important;
+}
+
+.contact-card:hover::before {
+  transform: scaleX(1) !important;
+}
+
+/* ===== MASSIVE AVATAR TRANSFORMATION ===== */
+.contact-avatar {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: var(--radius-full) !important;
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-secondary-500) 100%) !important;
+  color: var(--color-neutral-0) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: var(--font-size-2xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  box-shadow: var(--shadow-xl) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border: 3px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+.contact-avatar::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -50% !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 200% !important;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%) !important;
+  transform: rotate(45deg) !important;
+  animation: avatarShimmer 3s ease-in-out infinite !important;
+}
+
+@keyframes avatarShimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  50% { transform: translateX(0%) translateY(0%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* ===== ACTION BUTTONS MASSIVE UPGRADE ===== */
+.action-button {
+  width: 52px !important;
+  height: 52px !important;
+  border: 2px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-2xl) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: var(--color-neutral-600) !important;
+  font-size: 20px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all var(--duration-normal) var(--ease-bounce) !important;
+  box-shadow: var(--shadow-base) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.action-button:hover {
+  transform: translateY(-4px) scale(1.1) !important;
+  box-shadow: var(--shadow-xl) !important;
+  border-color: var(--color-primary-400) !important;
+  background: var(--color-primary-50) !important;
+  color: var(--color-primary-600) !important;
+}
+
+.chat-button:hover {
+  background: var(--color-success-50) !important;
+  color: var(--color-success-600) !important;
+  border-color: var(--color-success-400) !important;
+}
+
+/* ===== MASSIVE CHAT MODAL TRANSFORMATION ===== */
+.friend-chat-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10000 !important;
+  padding: var(--space-4) !important;
+  opacity: 0 !important;
+  animation: modalFadeIn var(--duration-normal) var(--ease-out) forwards !important;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.friend-chat-modal {
+  background: var(--color-neutral-0) !important;
+  border-radius: var(--radius-3xl) !important;
+  max-width: 900px !important;
+  width: 100% !important;
+  height: 90vh !important;
+  max-height: 800px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: var(--shadow-2xl) !important;
+  overflow: hidden !important;
+  border: 2px solid var(--color-primary-200) !important;
+  position: relative !important;
+  transform: scale(0.9) translateY(40px) !important;
+  animation: modalSlideIn var(--duration-normal) var(--ease-bounce) forwards !important;
+}
+
+@keyframes modalSlideIn {
+  from { 
+    transform: scale(0.9) translateY(40px);
+    opacity: 0;
+  }
+  to { 
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.friend-chat-modal::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 6px !important;
+  background: linear-gradient(90deg, var(--color-primary-500) 0%, var(--color-secondary-500) 100%) !important;
+  z-index: 1 !important;
+}
+
+/* ===== CHAT HEADER MASSIVE UPGRADE ===== */
+.chat-header {
+  background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-secondary-50) 100%) !important;
+  border-bottom: 1px solid var(--color-primary-200) !important;
+  padding: var(--space-6) !important;
+}
+
+.chat-header h2 {
+  font-size: var(--font-size-xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-secondary-600) 100%) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  margin: 0 0 var(--space-1) 0 !important;
+}
+
+.close-button {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: var(--radius-2xl) !important;
+  border: 2px solid var(--color-neutral-300) !important;
+  background: var(--color-neutral-0) !important;
+  color: var(--color-neutral-600) !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  transition: all var(--duration-normal) var(--ease-out) !important;
+  box-shadow: var(--shadow-base) !important;
+}
+
+.close-button:hover {
+  background: var(--color-error-50) !important;
+  color: var(--color-error-600) !important;
+  border-color: var(--color-error-400) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .primary-actions {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  
+  .primary-action-btn,
+  .secondary-action-btn {
+    width: 100% !important;
+    max-width: 300px !important;
+  }
+  
+  .contact-card {
+    padding: var(--space-6) !important;
+  }
+  
+  .friend-chat-modal {
+    height: 95vh !important;
+    margin: var(--space-2) !important;
+  }
+}
+
+/* ===== ANIMATIONS FOR MAXIMUM IMPACT ===== */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+  40%, 43% { transform: translate3d(0,-30px,0); }
+  70% { transform: translate3d(0,-15px,0); }
+  90% { transform: translate3d(0,-4px,0); }
+}
+
+/* Force high specificity for immediate visual impact */
+body .App * {
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+/* Remove any conflicting Tailwind styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
