@@ -255,13 +255,26 @@ Some things you could ask:
   const handleOverlayClick = (e) => {
     // Only close if clicking the overlay itself, not the modal content
     if (e.target === e.currentTarget) {
+      e.preventDefault()
+      e.stopPropagation()
       onClose()
     }
   }
 
   return (
-    <div className="friend-chat-overlay" onClick={handleOverlayClick}>
-      <div className="friend-chat-modal">
+    <div 
+      className="friend-chat-overlay" 
+      onClick={handleOverlayClick}
+      onMouseMove={(e) => e.stopPropagation()}
+      onMouseEnter={(e) => e.stopPropagation()}
+      onMouseLeave={(e) => e.stopPropagation()}
+    >
+      <div 
+        className="friend-chat-modal"
+        onMouseMove={(e) => e.stopPropagation()}
+        onMouseEnter={(e) => e.stopPropagation()}
+        onMouseLeave={(e) => e.stopPropagation()}
+      >
         <div className="chat-header">
           <div className="chat-header-info">
             <h2>🤖 Chat about {friend.name}</h2>

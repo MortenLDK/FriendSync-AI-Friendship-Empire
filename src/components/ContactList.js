@@ -23,15 +23,17 @@ const ContactList = ({ contacts, userProfile }) => {
   })
 
   return (
-    <div className="contact-list card">
+    <div className="contact-list">
       <div className="contact-list-header">
-        <h2>Your Contacts ({contacts.length})</h2>
+        <h2 className="contact-list-title">Your Network ({contacts.length})</h2>
+        <p className="contact-list-subtitle">Strategic relationship intelligence</p>
 
         <div className="controls">
           <div className="search-container">
+            <span className="search-icon">🔍</span>
             <input
               type="text"
-              placeholder="Search contacts..."
+              placeholder="Search your network..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
@@ -62,9 +64,17 @@ const ContactList = ({ contacts, userProfile }) => {
 
       {filteredContacts.length === 0 && (
         <div className="no-contacts">
-          {searchTerm || filterCategory !== 'All'
-            ? 'No contacts match your search criteria.'
-            : 'No contacts imported yet.'}
+          <div className="no-contacts-icon">👥</div>
+          <h3 className="no-contacts-title">
+            {searchTerm || filterCategory !== 'All'
+              ? 'No matches found'
+              : 'Your network awaits'}
+          </h3>
+          <p className="no-contacts-description">
+            {searchTerm || filterCategory !== 'All'
+              ? 'Try adjusting your search criteria or filters'
+              : 'Start building your relationship intelligence by adding friends'}
+          </p>
         </div>
       )}
     </div>
@@ -77,18 +87,7 @@ const ContactCard = ({ contact, userProfile }) => {
   const [showRelationshipGoals, setShowRelationshipGoals] = useState(false)
   const [showFriendChat, setShowFriendChat] = useState(false)
 
-  const getCategoryColor = (category) => {
-    switch (category) {
-      case 'Inner Circle':
-        return '#e74c3c'
-      case 'Regular Friends':
-        return '#3498db'
-      case 'Network':
-        return '#95a5a6'
-      default:
-        return '#6c757d'
-    }
-  }
+  // Removed getCategoryColor function - using CSS variables instead
 
   const handleSuggestionComplete = (_contactId, suggestion, _category) => {
     // Track completed suggestions
@@ -98,40 +97,44 @@ const ContactCard = ({ contact, userProfile }) => {
   return (
     <div className="contact-card">
       <div className="contact-header">
-        <div className="contact-avatar">{contact.name.charAt(0).toUpperCase()}</div>
         <div className="contact-info">
-          <h3 className="contact-name">{contact.name}</h3>
-          <div className="contact-badges">
-            <span
-              className="contact-category"
-              style={{ backgroundColor: getCategoryColor(contact.category) }}
-            >
-              {contact.category}
-            </span>
-            {contact.tier === 'premium' && <span className="premium-badge">Premium</span>}
+          <div className="contact-avatar">{contact.name.charAt(0).toUpperCase()}</div>
+          <div className="contact-details">
+            <h3 className="contact-name">{contact.name}</h3>
+            <div className="contact-badges">
+              <span className="contact-category">
+                {contact.category}
+              </span>
+              {contact.tier === 'premium' && <span className="premium-badge">✨ Premium</span>}
+            </div>
+            {contact.loveLanguage && (
+              <div className="contact-meta">
+                💝 {contact.loveLanguage}
+              </div>
+            )}
           </div>
         </div>
         <div className="card-actions">
           <button
             onClick={() => setShowFriendChat(true)}
-            className="chat-button"
-            title="Chat about this friend"
+            className="action-button chat-button"
+            title="AI Strategic Advisor"
           >
-            💬
+            🤖
           </button>
           <button
             onClick={() => setShowRelationshipGoals(!showRelationshipGoals)}
-            className={`relationship-button ${showRelationshipGoals ? 'active' : ''}`}
+            className={`action-button relationship-button ${showRelationshipGoals ? 'active' : ''}`}
             title="Relationship Goals"
           >
             🎯
           </button>
           <button
             onClick={() => setShowAI(!showAI)}
-            className={`ai-button ${showAI ? 'active' : ''}`}
-            title="AI Suggestions"
+            className={`action-button expand-button ${showAI ? 'active' : ''}`}
+            title="Smart Suggestions"
           >
-            🤖
+            💡
           </button>
           {userProfile?.setupCompleted && (
             <button
@@ -142,7 +145,7 @@ const ContactCard = ({ contact, userProfile }) => {
                 })
                 document.dispatchEvent(event)
               }}
-              className="invite-button"
+              className="action-button invite-button"
               title="Invite to FriendSync"
             >
               📨
@@ -150,104 +153,94 @@ const ContactCard = ({ contact, userProfile }) => {
           )}
           <button
             onClick={() => setExpandedProfile(!expandedProfile)}
-            className={`expand-button ${expandedProfile ? 'active' : ''}`}
-            title="View Full Profile"
+            className={`action-button expand-button ${expandedProfile ? 'active' : ''}`}
+            title="Full Profile"
           >
-            {expandedProfile ? '📕' : '📖'}
+            {expandedProfile ? '📋' : '👤'}
           </button>
         </div>
       </div>
 
-      <div className="contact-details">
-        {/* Basic Contact Info */}
-        {contact.email && (
-          <div className="contact-detail">
-            <span className="detail-label">Email:</span>
-            <span className="detail-value">{contact.email}</span>
-          </div>
-        )}
-        {contact.phone && (
-          <div className="contact-detail">
-            <span className="detail-label">Phone:</span>
-            <span className="detail-value">{contact.phone}</span>
-          </div>
-        )}
-
-        {/* Enhanced Profile Info */}
-        {contact.loveLanguage && (
-          <div className="contact-detail">
-            <span className="detail-label">Love Language:</span>
-            <span className="detail-value">{contact.loveLanguage}</span>
-          </div>
-        )}
-
-        {expandedProfile && (
-          <div className="expanded-profile">
-            {contact.personalityType && (
-              <div className="contact-detail">
-                <span className="detail-label">Personality:</span>
-                <span className="detail-value">
-                  {contact.personalityType} {contact.energyStyle}
-                </span>
-              </div>
-            )}
-
-            {contact.communicationStyle && (
-              <div className="contact-detail">
-                <span className="detail-label">Communication Style:</span>
-                <span className="detail-value">{contact.communicationStyle}</span>
-              </div>
-            )}
-
-            {contact.currentGoals?.length > 0 && (
-              <div className="contact-detail">
-                <span className="detail-label">Current Goals:</span>
-                <span className="detail-value">{contact.currentGoals.join(', ')}</span>
-              </div>
-            )}
-
-            {contact.challenges?.length > 0 && (
-              <div className="contact-detail">
-                <span className="detail-label">Challenges:</span>
-                <span className="detail-value">{contact.challenges.join(', ')}</span>
-              </div>
-            )}
-
-            {contact.interests?.length > 0 && (
-              <div className="contact-detail">
-                <span className="detail-label">Interests:</span>
-                <span className="detail-value">{contact.interests.join(', ')}</span>
-              </div>
-            )}
-
-            {contact.preferredContactMethod && (
-              <div className="contact-detail">
-                <span className="detail-label">Preferred Contact:</span>
-                <span className="detail-value">{contact.preferredContactMethod}</span>
-              </div>
-            )}
-
-            {contact.bestTimeToConnect && (
-              <div className="contact-detail">
-                <span className="detail-label">Best Time:</span>
-                <span className="detail-value">{contact.bestTimeToConnect}</span>
-              </div>
-            )}
-
-            <div className="contact-detail">
-              <span className="detail-label">Relationship Depth:</span>
-              <span className="detail-value">{contact.relationshipDepth}</span>
+      {expandedProfile && (
+        <div className="expanded-profile">
+          <div className="profile-grid">
+            <div className="profile-section">
+              <h4 className="profile-section-title">Contact Info</h4>
+              {contact.email && (
+                <div className="contact-detail">
+                  <div className="detail-label">Email</div>
+                  <div className="detail-value">{contact.email}</div>
+                </div>
+              )}
+              {contact.phone && (
+                <div className="contact-detail">
+                  <div className="detail-label">Phone</div>
+                  <div className="detail-value">{contact.phone}</div>
+                </div>
+              )}
+              {contact.preferredContactMethod && (
+                <div className="contact-detail">
+                  <div className="detail-label">Preferred Contact</div>
+                  <div className="detail-value">{contact.preferredContactMethod}</div>
+                </div>
+              )}
             </div>
-          </div>
-        )}
 
-        {contact.notes && (
-          <div className="contact-detail">
-            <span className="detail-label">Notes:</span>
-            <span className="detail-value">{contact.notes}</span>
+            <div className="profile-section">
+              <h4 className="profile-section-title">Personality</h4>
+              {contact.personalityType && (
+                <div className="contact-detail">
+                  <div className="detail-label">Type</div>
+                  <div className="detail-value">{contact.personalityType}</div>
+                </div>
+              )}
+              {contact.communicationStyle && (
+                <div className="contact-detail">
+                  <div className="detail-label">Communication</div>
+                  <div className="detail-value">{contact.communicationStyle}</div>
+                </div>
+              )}
+              {contact.loveLanguageSecondary && (
+                <div className="contact-detail">
+                  <div className="detail-label">Secondary Love Language</div>
+                  <div className="detail-value">{contact.loveLanguageSecondary}</div>
+                </div>
+              )}
+            </div>
+
+            <div className="profile-section">
+              <h4 className="profile-section-title">Goals & Interests</h4>
+              {contact.personalGoals && (
+                <div className="contact-detail">
+                  <div className="detail-label">Personal Goals</div>
+                  <div className="detail-value">{contact.personalGoals}</div>
+                </div>
+              )}
+              {contact.professionalGoals && (
+                <div className="contact-detail">
+                  <div className="detail-label">Professional Goals</div>
+                  <div className="detail-value">{contact.professionalGoals}</div>
+                </div>
+              )}
+              {contact.hobbies && (
+                <div className="contact-detail">
+                  <div className="detail-label">Hobbies</div>
+                  <div className="detail-value">{contact.hobbies}</div>
+                </div>
+              )}
+            </div>
+
+            {contact.notes && (
+              <div className="profile-section">
+                <h4 className="profile-section-title">Notes</h4>
+                <div className="contact-detail">
+                  <div className="detail-value">{contact.notes}</div>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {showRelationshipGoals && (
         <RelationshipDesires

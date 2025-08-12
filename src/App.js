@@ -144,94 +144,31 @@ function App() {
   }
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: '#ffffff',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
-      }}
-    >
-      <header
-        style={{
-          background: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(10px)',
-          borderBottom: '1px solid #e2e8f0',
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '0 1rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            height: '4rem',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <h1
-              style={{
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                color: '#0f172a',
-                margin: 0,
-              }}
-            >
+    <div className="App">
+      <header className="modern-header">
+        <div className="header-container">
+          <div className="header-brand">
+            <h1 className="header-title">
               FriendSync
             </h1>
-            <p
-              style={{
-                fontSize: '0.875rem',
-                color: '#64748b',
-                margin: 0,
-                display: window.innerWidth > 640 ? 'block' : 'none',
-              }}
-            >
-              AI-powered friendship management
+            <p className="header-subtitle">
+              AI-powered relationship intelligence
             </p>
           </div>
 
           <SignedIn>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div className="header-actions">
               {userProfile?.setupCompleted && (
                 <>
                   <button
                     onClick={() => setShowLocalAISetup(true)}
-                    style={{
-                      background: 'transparent',
-                      color: '#64748b',
-                      border: 'none',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '0.375rem',
-                      fontSize: '0.875rem',
-                      fontWeight: 500,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                    }}
-                    onMouseOver={(e) => (e.target.style.color = '#0f172a')}
-                    onMouseOut={(e) => (e.target.style.color = '#64748b')}
+                    className="btn btn-ghost btn-sm"
                   >
                     🤖 AI Setup
                   </button>
                   <button
                     onClick={() => setShowUserProfile(!showUserProfile)}
-                    style={{
-                      background: 'transparent',
-                      color: '#64748b',
-                      border: 'none',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '0.375rem',
-                      fontSize: '0.875rem',
-                      fontWeight: 500,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                    }}
-                    onMouseOver={(e) => (e.target.style.color = '#0f172a')}
-                    onMouseOut={(e) => (e.target.style.color = '#64748b')}
+                    className="btn btn-ghost btn-sm"
                   >
                     {showUserProfile ? 'Hide Profile' : 'Show Profile'}
                   </button>
@@ -242,52 +179,16 @@ function App() {
           </SignedIn>
 
           <SignedOut>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div className="header-actions">
               <button
                 onClick={() => setShowAuth('signup')}
-                style={{
-                  background: '#0f172a',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.background = '#1e293b'
-                  e.target.style.transform = 'translateY(-1px)'
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.background = '#0f172a'
-                  e.target.style.transform = 'translateY(0)'
-                }}
+                className="btn btn-primary btn-sm"
               >
                 Sign Up
               </button>
               <button
                 onClick={() => setShowAuth('signin')}
-                style={{
-                  background: 'transparent',
-                  color: '#0f172a',
-                  border: '1px solid #e2e8f0',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.background = '#f8fafc'
-                  e.target.style.borderColor = '#cbd5e1'
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.background = 'transparent'
-                  e.target.style.borderColor = '#e2e8f0'
-                }}
+                className="btn btn-secondary btn-sm"
               >
                 Sign In
               </button>
@@ -296,16 +197,8 @@ function App() {
         </div>
       </header>
 
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
-        <div
-          style={{
-            maxWidth: '72rem',
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-          }}
-        >
+      <main className="main-content">
+        <div className="content-grid">
           <SignedOut>
             <div className="auth-container">
               {showAuth === 'signup'
@@ -335,66 +228,17 @@ function App() {
 
             {(!showUserProfile || userProfile?.setupCompleted) && (
               <>
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    marginBottom: '2rem',
-                    justifyContent: 'center',
-                  }}
-                >
+                <div className="primary-actions">
                   <button
                     onClick={() => setShowAddContact(true)}
-                    style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      color: 'white',
-                      border: 'none',
-                      padding: '1rem 2rem',
-                      borderRadius: '12px',
-                      fontSize: '1rem',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
-                      minWidth: '200px',
-                    }}
-                    onMouseOver={(e) => {
-                      e.target.style.transform = 'translateY(-2px)'
-                      e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)'
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.transform = 'translateY(0)'
-                      e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)'
-                    }}
+                    className="primary-action-btn"
                   >
                     🧠 Add Friend Profile
                   </button>
                   {contacts.length >= 2 && (
                     <button
                       onClick={() => setShowScheduler(true)}
-                      style={{
-                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                        color: 'white',
-                        border: 'none',
-                        padding: '1rem 2rem',
-                        borderRadius: '12px',
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)',
-                        minWidth: '200px',
-                      }}
-                      onMouseOver={(e) => {
-                        e.target.style.transform = 'translateY(-2px)'
-                        e.target.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.4)'
-                      }}
-                      onMouseOut={(e) => {
-                        e.target.style.transform = 'translateY(0)'
-                        e.target.style.boxShadow = '0 4px 15px rgba(16, 185, 129, 0.3)'
-                      }}
+                      className="secondary-action-btn"
                     >
                       📅 Schedule Actions
                     </button>
@@ -414,45 +258,17 @@ function App() {
 
                 {/* Data Recovery for deployment changes */}
                 {contacts.length === 0 && userProfile && userProfile.setupCompleted && (
-                  <div
-                    style={{
-                      background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-                      border: '1px solid #f59e0b',
-                      borderRadius: '12px',
-                      padding: '1.5rem',
-                      marginBottom: '2rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <h3
-                      style={{
-                        margin: '0 0 1rem 0',
-                        color: '#92400e',
-                        fontSize: '1.125rem',
-                        fontWeight: 600,
-                      }}
-                    >
+                  <div className="data-recovery-notice">
+                    <h3 className="recovery-title">
                       🔄 Missing Your Friends Data?
                     </h3>
-                    <p style={{ margin: '0 0 1rem 0', color: '#78350f', lineHeight: 1.5 }}>
+                    <p className="recovery-description">
                       If you had Louie, Numan, and other friends on the previous version, you can
                       recover them using the data recovery tool.
                     </p>
                     <button
                       onClick={() => setShowDataRecovery(true)}
-                      style={{
-                        background: '#f59e0b',
-                        color: 'white',
-                        border: 'none',
-                        padding: '0.75rem 1.5rem',
-                        borderRadius: '8px',
-                        fontSize: '0.875rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                      }}
-                      onMouseOver={(e) => (e.target.style.background = '#d97706')}
-                      onMouseOut={(e) => (e.target.style.background = '#f59e0b')}
+                      className="recovery-btn"
                     >
                       🔧 Recover My Data
                     </button>
@@ -460,23 +276,12 @@ function App() {
                 )}
 
                 {/* Import function moved to bottom for better UX flow */}
-                <div
-                  style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid #e2e8f0' }}
-                >
-                  <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                    <h3
-                      style={{
-                        color: '#64748b',
-                        fontSize: '0.875rem',
-                        fontWeight: 500,
-                        margin: '0 0 0.5rem 0',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}
-                    >
+                <div className="advanced-section">
+                  <div className="advanced-header">
+                    <h3 className="advanced-title">
                       Advanced
                     </h3>
-                    <p style={{ color: '#9ca3af', fontSize: '0.75rem', margin: 0 }}>
+                    <p className="advanced-description">
                       Import contacts from CSV file
                     </p>
                   </div>
