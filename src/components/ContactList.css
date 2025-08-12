@@ -52,19 +52,21 @@
 }
 
 .contacts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .contact-card {
   background: white;
   border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  border-radius: 16px;
+  padding: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .contact-card:hover {
@@ -80,30 +82,32 @@
 }
 
 .contact-avatar {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-right: 1rem;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
 }
 
 .contact-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .contact-name {
   color: #333;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .contact-badges {
@@ -136,7 +140,8 @@
 
 .card-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .ai-button,
@@ -146,16 +151,17 @@
 .chat-button {
   background: none;
   border: 2px solid #e9ecef;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 12px;
+  padding: 12px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   transition: all 0.2s;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .ai-button:hover,
@@ -246,21 +252,42 @@
   }
 
   .contacts-grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 1rem;
+    max-width: 100%;
+    margin: 0;
   }
 
   .contact-card {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .contact-header {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
   }
 
   .contact-avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
+    width: 56px;
+    height: 56px;
+    font-size: 1.25rem;
+    margin-right: 1rem;
+  }
+
+  .contact-name {
+    font-size: 1.25rem;
+  }
+
+  .card-actions {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ai-button,
+  .expand-button,
+  .relationship-button,
+  .invite-button,
+  .chat-button {
+    width: 44px;
+    height: 44px;
   }
 }

@@ -9,12 +9,14 @@ const FriendChat = ({ friend, onClose }) => {
   const messagesEndRef = useRef(null)
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   useEffect(() => {
     scrollToBottom()
-  }, [scrollToBottom])
+  }, [messages])
 
   useEffect(() => {
     // Add welcome message when chat opens
@@ -30,7 +32,7 @@ Some things you could ask:
 • "When should I reach out to ${friend.name} next?"`,
     }
     setMessages([welcomeMessage])
-  }, [friend])
+  }, [friend.name])
 
   const createFriendContext = () => {
     const context = []
