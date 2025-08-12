@@ -19,6 +19,17 @@ const FriendChat = ({ friend, onClose }) => {
   }, [messages])
 
   useEffect(() => {
+    const handleEscapeKey = (e) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscapeKey)
+    return () => document.removeEventListener('keydown', handleEscapeKey)
+  }, [onClose])
+
+  useEffect(() => {
     // Add welcome message when chat opens
     const welcomeMessage = {
       id: Date.now(),
@@ -241,9 +252,16 @@ Some things you could ask:
     }
   }
 
+  const handleOverlayClick = (e) => {
+    // Only close if clicking the overlay itself, not the modal content
+    if (e.target === e.currentTarget) {
+      onClose()
+    }
+  }
+
   return (
-    <div className="friend-chat-overlay" onClick={onClose}>
-      <div className="friend-chat-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="friend-chat-overlay" onClick={handleOverlayClick}>
+      <div className="friend-chat-modal">
         <div className="chat-header">
           <div className="chat-header-info">
             <h2>🤖 Chat about {friend.name}</h2>
@@ -279,12 +297,17 @@ Some things you could ask:
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
+            onClick={(e) => e.stopPropagation()}
+            onFocus={(e) => e.stopPropagation()}
             placeholder={`Ask me anything about ${friend.name}...`}
             disabled={isLoading}
             rows="2"
           />
           <button
-            onClick={sendMessage}
+            onClick={(e) => {
+              e.stopPropagation()
+              sendMessage()
+            }}
             disabled={isLoading || !inputMessage.trim()}
             className="send-button"
           >
